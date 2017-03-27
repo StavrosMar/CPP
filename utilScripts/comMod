@@ -1,0 +1,30 @@
+#!/bin/sh
+
+file=$2
+path=$1
+
+echo "File to Check : $path$file "
+
+outputfile=exec_$file
+compileLog=compileLog_$file
+
+log=$path$compileLog
+
+Date="`date`"
+messageStart="
+              *************CompileStart : $Date  *************
+	                                                       " 
+messageEnd="
+            ***************EndCompile : $Date ***************
+                                                              "
+
+compileCommand="g++ $path$file -o $path$outputfile"
+
+echo "Running : $compileCommand"
+
+compileCommand="echo \"lala\""
+
+command="`echo $messageStart`;`$compileCommand`;`echo $messageEnd`"
+
+when-changed FILE $path$file -c $command > $log
+tail -f $log
