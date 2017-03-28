@@ -1,4 +1,5 @@
 // PointerVSArray test
+// this is a test
 
 #include <iostream>
 
