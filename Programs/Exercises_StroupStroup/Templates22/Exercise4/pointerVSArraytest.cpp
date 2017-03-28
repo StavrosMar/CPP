@@ -1,3 +1,5 @@
+// Test for pointers vs Arrays
+
 #include <iostream>
 
 int main() { 
