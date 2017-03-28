@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-// Test for pointers vs Arrays
-=======
 // PointerVSArray test
->>>>>>> c641dd1cdb0b7edab5d96331bf9066aa17dd0586
 
 #include <iostream>
 
