@@ -1,5 +1,5 @@
 // PointerVSArray test
-// Stavros
+//Stavros
 
 #include <iostream>
 
