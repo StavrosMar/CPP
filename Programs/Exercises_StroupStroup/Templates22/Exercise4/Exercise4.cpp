@@ -1,8 +1,6 @@
 // Template Exercises 23 Book - 24 Exercises
 // Exercise 4 - Started from scratch
 
-#include <iostream>
-
 //String class declaration
 template<typename C>
 class String {
@@ -195,14 +193,23 @@ std::ostream& operator<<(std::ostream& os, String<C>& s) {
 }
 
 template<typename C>
-String<C>& operator+=(String<C>& a, const  String<C>& b) {
+String<C>& operator+=(String<C>& a, String<C>& b) {
 	
 	for (auto ci : b) {
 
 		a+=ci;
-        }
+    }
 	
 	return a;
+}
+
+template<typename C>
+String<C>& operator+(String<C>& a,String<C>& b) {
+    
+    String<C> res{a};
+    res+=b;
+    return res;
+    
 }
 
 // Main - Entry point //
@@ -229,6 +236,10 @@ int main() {
 	stavros+=4;
 	patrika+=stavros;
         std::cout<<patrika<<std::endl;
-	
+
+// Test4 - + operator test for strings
+
+    std::cout<<patrika+patrika<<std::endl;
+    
 	return 0;
 }
