@@ -1,1 +1,2 @@
 1) find out why const does not work on the declaration of += operator for strings
+2) Need to replace memcpy routine. It is only for characters i.e. for int's it is doing an implicit bullshit conversion
