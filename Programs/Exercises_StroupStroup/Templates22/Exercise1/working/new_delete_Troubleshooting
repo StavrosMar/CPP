@@ -1,0 +1,23 @@
+//Random class for usage with the test class "dessous"
+template<typename T>
+class RandomClass {
+	T* value
+};
+
+// Class for in-class New and Delete operation
+template<typename T>
+class NewDeleteInClassTest{
+	Random* patrikas;
+public:
+	NewDeleteInClassTest(T* mam) : patrikas = new Random<T>{mam};
+};
+
+//Main function to be called
+int main {
+
+	int a=10;
+
+	NewDeleteInClassTest<int> b(&a);
+	
+	return 0;
+}

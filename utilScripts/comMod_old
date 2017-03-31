@@ -1,0 +1,17 @@
+#!/bin/sh
+
+file=$2
+path=$1
+
+echo "File to Check : $path$file "
+
+outputfile=exec_$file
+
+message="****************CompileFinished*******************" 
+compileCommand="g++ $path$file -o $path$outputfile"
+
+echo $compileCommand
+
+compileLog=compileLog_$file
+
+while sleep 1; do  ls $path$file | entr $compileCommand >& $path$compileLog; echo $message; done
