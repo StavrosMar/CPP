@@ -3,7 +3,6 @@
 
 #include <iostream>
 
-
 //String class declaration
 template<typename C>
 class String {
@@ -34,9 +33,9 @@ public:
 	int capacity() const
 	     { return (sz<=short_max) ? short_max : sz+space;}
 
-        
-	C* begin = ptr;
-	int length = sz;
+        //Access functions
+        const C* begin();
+        const C* end();
 
 	//Destructor
 	~String() { if (short_max<sz) delete[] ptr;}
@@ -45,24 +44,27 @@ private:
 	int sz;
 	C* ptr; // ptr points to sz Cs
 
-	//union used for the short-string optimisation - only one of the two members will actually be valid at all times.
+	//union used for the short-string optimisation
+        // only one of the two members will actually be valid at all times. (the one that was written last)
 	union {
 		int space;
 		C ch[short_max+1];
 	};
 
-	void check(int n) const // range check
-	{
-		if (n<0 || sz<=n)
-			throw std::out_of_range("String::at()");
-	}
-
-	//ancillary member functions
-	void copy_from(const String& x);
-	void move_from(String&& x);
+	//auxiliary member functions
+        void check(int) const ;// range check function
+	void copy_from(const String&);
+	void move_from(String&& );
 
 };
 
+// Ancillary functions
+template<typename C>
+void String<C>::check(int n) const // range check
+{
+	if (n<0 || sz<=n)
+		throw std::out_of_range("String::at()");
+}
 
 template<typename T>
 T* expand(const T* ptr, int n) // expand into free store
@@ -72,7 +74,7 @@ T* expand(const T* ptr, int n) // expand into free store
 	return p;
 }
 
-//copy_from : make *this a copy of x
+  //copy_from : make *this a copy of x
 template<typename C>
 void String<C>::copy_from(const String<C>& x) {
 
@@ -87,8 +89,7 @@ void String<C>::copy_from(const String<C>& x) {
 	}
 }
 
-
-//move_from
+  //move_from
 template<typename C>
 void String<C>::move_from(String<C>&& x) {
 
@@ -106,6 +107,20 @@ void String<C>::move_from(String<C>&& x) {
 		x.sz = 0;
 		x.ch[0]=0;
 	}
+}
+ //Access functions
+template<typename C>
+const C* String<C>::begin() {
+	
+	return ptr;
+
+}
+
+template<typename C>
+const C* String<C>::end() {
+	
+	return ptr+sz;
+
 }
 
 //Operator Declarations
@@ -165,30 +180,17 @@ String<C>& String<C>::operator=(String<C>&& x) { // move assignment
 
 }
 
-template<typename C>
-const C* begin(String<C>& s) {
-	
-	return s.c_str();
-
-}
-
-template<typename C>
-const C* end(String<C>& s) {
-	
-	return s.c_str()+s.sz;
-
-}
-
 // Non member functions / operators
+
 template<typename C>
 std::ostream& operator<<(std::ostream& os, String<C>& s) {
 	
-	for(int i=0; i != s.length ; ++i) {
-		os<<s.begin[i];
-		std::cout<<s.begin[i]<<std::endl;
+	for(auto x : s ) {   // in order auto to work String must have begin() and end() functions defined.
+		os<<x;
+		//std::cout<<s.begin[i]<<std::endl;
 	}
 
-	return os<<s.begin[0];
+	return os;
 }
 
 //template<typename C>
@@ -197,13 +199,21 @@ std::ostream& operator<<(std::ostream& os, String<C>& s) {
 // Main - Entry point //
 int main() {
 
-	//String test
+
+//Test1 - String test for chars
 	String<char> manika;
         manika+='8';	
         manika+='9';	
 
         std::cout<<manika<<std::endl;      
-        std::cout<<*begin(manika)<<std::endl;      
+
+//Test2 - String test for ints
+	String<int> patrika;
+        patrika+=1;	
+        patrika+=2;	
+
+        std::cout<<patrika<<std::endl;      
+ //       std::cout<<*begin(manika)<<std::endl;      
  	
 	return 0;
 }
