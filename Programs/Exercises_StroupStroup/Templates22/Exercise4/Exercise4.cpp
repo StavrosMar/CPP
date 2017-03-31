@@ -1,5 +1,5 @@
 // Template Exercises 23 Book - 24 Exercises
-// Exercise 4 - started from scratch
+// Exercise 4 - Started from scratch
 
 #include <iostream>
 
