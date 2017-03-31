@@ -1,1 +1,0 @@
-1) find out why const does not work on the declaration of += operator for strings
