@@ -1,6 +1,9 @@
 // Template Exercises 23 Book - 24 Exercises
 // Exercise 4 - Started from scratch
 
+#include <iostream>
+#include <cstring>
+
 //String class declaration
 template<typename C>
 class String {
@@ -23,6 +26,7 @@ public:
 
 
 	String& operator+=(C c); //add c at the end
+        String& operator+(C& c);
 
 	const C* c_str() {return ptr;}
 	const C* c_str() const {return ptr;}
@@ -75,6 +79,8 @@ T* expand(const T* ptr, int n) // expand into free store
   //copy_from : make *this a copy of x
 template<typename C>
 void String<C>::copy_from(const String<C>& x) {
+	
+	std::cout << "** Copy executed **" << std::endl;
 
 	if (x.sz<=short_max) {
 		memcpy(this,&x,sizeof(x)); // copy *this  - Book43.5
@@ -90,6 +96,8 @@ void String<C>::copy_from(const String<C>& x) {
   //move_from
 template<typename C>
 void String<C>::move_from(String<C>&& x) {
+
+	std::cout << "** Move executed **" << std::endl;
 
 	if (x.sz<=short_max) {
 		
@@ -159,6 +167,13 @@ String<C>& String<C>::operator+=(C c) {
 }      
 
 template<typename C>
+String<C>& String<C>::operator+(C& c) {
+    
+    return (*this+=c);
+    
+}
+
+template<typename C>
 String<C>&  String<C>::operator=(const String<C>& x) { // copy assignment
 
 	if (this==&x) return *this; // dealing with self-assignment
@@ -198,17 +213,25 @@ String<C>& operator+=(String<C>& a, String<C>& b) {
 	for (auto ci : b) {
 
 		a+=ci;
-    }
+	}
 	
 	return a;
 }
 
 template<typename C>
-String<C>& operator+(String<C>& a,String<C>& b) {
+String<C> operator+(String<C>& a,String<C>& b) {
     
     String<C> res{a};
     res+=b;
     return res;
+    
+}
+
+template<typename C>
+String<C>&& operator-(String<C>& a, C& c) {
+    
+
+    return (a=);
     
 }
 
@@ -237,9 +260,19 @@ int main() {
 	patrika+=stavros;
         std::cout<<patrika<<std::endl;
 
+// Test 4a - copy from
+
+	String<char> lola{manika};
+	std::cout<< lola << std::endl;
+
+	char chara = '8';
+	String<char> nikos(manika-chara);
+	std::cout<< nikos << std::endl;
+
 // Test4 - + operator test for strings
 
-    std::cout<<patrika+patrika<<std::endl;
+   //     std::cout<<manika+manika<<std::endl;
     
+
 	return 0;
 }
