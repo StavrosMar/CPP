@@ -26,7 +26,7 @@ public:
 
 
 	String& operator+=(C c); //add c at the end
-        String& operator+(C& c);
+        String& operator+(const C& c);
 
 	const C* c_str() {return ptr;}
 	const C* c_str() const {return ptr;}
@@ -167,7 +167,7 @@ String<C>& String<C>::operator+=(C c) {
 }      
 
 template<typename C>
-String<C>& String<C>::operator+(C& c) {
+String<C>& String<C>::operator+(const C& c) {
     
     return (*this+=c);
     
@@ -226,14 +226,14 @@ String<C> operator+(String<C>& a,String<C>& b) {
     return res;
     
 }
-
+/*
 template<typename C>
 String<C>&& operator-(String<C>& a, C& c) {
     
 
     return (a=);
     
-}
+}*/
 
 // Main - Entry point //
 int main() {
@@ -265,14 +265,21 @@ int main() {
 	String<char> lola{manika};
 	std::cout<< lola << std::endl;
 
-	char chara = '8';
-	String<char> nikos(manika-chara);
-	std::cout<< nikos << std::endl;
 
 // Test4 - + operator test for strings
 
    //     std::cout<<manika+manika<<std::endl;
-    
+	
+	// Case 1 
+	//+member operator. copy is triggered
+	char chara = '8';
+	String<char> nikos(manika+chara);
+	std::cout<< nikos << std::endl;
+    	
+	//+member operator. copy is triggered
+	String<char> maria(manika+'3');
+	std::cout<< maria << std::endl;
+	std::cout<< "Manika is" << manika << std::endl;
 
 	return 0;
 }
