@@ -26,7 +26,6 @@ public:
 
 
 	String& operator+=(C c); //add c at the end
-        String& operator+(const C& c);
 
 	const C* c_str() {return ptr;}
 	const C* c_str() const {return ptr;}
@@ -56,7 +55,7 @@ private:
 	//auxiliary member functions
         void check(int) const ;// range check function
 	void copy_from(const String&);
-	void move_from(String&& );
+	void move_from(String& );
 
 };
 
@@ -80,8 +79,6 @@ T* expand(const T* ptr, int n) // expand into free store
 template<typename C>
 void String<C>::copy_from(const String<C>& x) {
 	
-	std::cout << "** Copy executed **" << std::endl;
-
 	if (x.sz<=short_max) {
 		memcpy(this,&x,sizeof(x)); // copy *this  - Book43.5
 		ptr = ch;
@@ -91,13 +88,15 @@ void String<C>::copy_from(const String<C>& x) {
 		sz = x.sz;
 		space = 0;
 	}
+	
+	std::cout << "** Copy executed to :**" << *this << std::endl;
 }
 
   //move_from
 template<typename C>
-void String<C>::move_from(String<C>&& x) {
+void String<C>::move_from(String<C>& x) {
 
-	std::cout << "** Move executed **" << std::endl;
+	std::cout<< "** Move executed on : **" << x <<std::endl;
 
 	if (x.sz<=short_max) {
 		
@@ -167,13 +166,6 @@ String<C>& String<C>::operator+=(C c) {
 }      
 
 template<typename C>
-String<C>& String<C>::operator+(const C& c) {
-    
-    return (*this+=c);
-    
-}
-
-template<typename C>
 String<C>&  String<C>::operator=(const String<C>& x) { // copy assignment
 
 	if (this==&x) return *this; // dealing with self-assignment
@@ -226,14 +218,15 @@ String<C> operator+(String<C>& a,String<C>& b) {
     return res;
     
 }
-/*
-template<typename C>
-String<C>&& operator-(String<C>& a, C& c) {
-    
 
-    return (a=);
+template<typename C>
+String<C> operator+(String<C>& a,const C& c) {
     
-}*/
+    String<C> res{a};
+    res+=c;
+    return res;
+    
+}
 
 // Main - Entry point //
 int main() {
@@ -268,18 +261,19 @@ int main() {
 
 // Test4 - + operator test for strings
 
-   //     std::cout<<manika+manika<<std::endl;
-	
-	// Case 1 
-	//+member operator. copy is triggered
+	// We are passing an rvalue here manika+chara. 
+	// ** compiler has copy elision by default ** (will not run move if not needed to)
+	// ** if we want to disable it compile like the following : -fno-elide-constructors
 	char chara = '8';
+	std::cout<< "**** Before String / char concat call "<<std::endl;
 	String<char> nikos(manika+chara);
-	std::cout<< nikos << std::endl;
-    	
-	//+member operator. copy is triggered
+	std::cout<< "##### After String / char concat call "<<std::endl;
+        
+	// same but validation on const chars e.g. 3 and that manika has not altered
+	// throughout the operations
 	String<char> maria(manika+'3');
 	std::cout<< maria << std::endl;
-	std::cout<< "Manika is" << manika << std::endl;
+	std::cout<< "Manika is " << manika << std::endl;
 
 	return 0;
 }
