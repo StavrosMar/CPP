@@ -1,3 +1,1 @@
-1) find out why const does not work on the declaration of += operator for strings
-2) && values - how to return this thing : fixed issue in the move operator
-3) string+char+stirng or string+char+char not working --> maybe because the operators need to be defined explicitly for rvalues e.g. string+char is an rvalue 
+) string+char+stirng or string+char+char not working --> maybe because the operators need to be defined explicitly for rvalues e.g. string+char is an rvalue 

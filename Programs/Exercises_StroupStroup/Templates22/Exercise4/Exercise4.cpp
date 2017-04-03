@@ -189,7 +189,7 @@ String<C>& String<C>::operator=(String<C>&& x) { // move assignment
 // Non member functions / operators
 
 template<typename C>
-std::ostream& operator<<(std::ostream& os, String<C>& s) {
+std::ostream& operator<<(std::ostream& os, const String<C>& s) {
 	
 	for(auto x : s ) {   // String must have begin() and end()
                              // for more  constPointersForLoop.cpp 
@@ -211,7 +211,7 @@ String<C>& operator+=(String<C>& a, const String<C>& b) {
 }
 
 template<typename C>
-String<C> operator+(String<C>& a,String<C>& b) {
+String<C> operator+(const String<C>& a, const String<C>& b) {
     
     String<C> res{a};
     res+=b;
@@ -220,7 +220,7 @@ String<C> operator+(String<C>& a,String<C>& b) {
 }
 
 template<typename C>
-String<C> operator+(String<C>& a,const C& c) {
+String<C> operator+(const String<C>& a,const C& c) {
     
     String<C> res{a};
     res+=c;
@@ -280,7 +280,7 @@ int main() {
 
 
 // Test6 - normal string
-	nikos += "manika lola"; // Does not work because I have not provided an implicit constructor
+//	nikos += "manika lola"; // Does not work because I have not provided an implicit constructor
 	                        // from a C type string. so this would have been equivalent to nikos+= String("manika lola")
 
 
