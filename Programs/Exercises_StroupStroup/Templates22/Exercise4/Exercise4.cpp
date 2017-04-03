@@ -25,7 +25,7 @@ public:
 	C  at(int n) const { check(n); return ptr[n];}
 
 
-	String& operator+=(C c); //add c at the end
+	String& operator+=(const C c); //add c at the end
 
 	const C* c_str() {return ptr;}
 	const C* c_str() const {return ptr;}
@@ -35,8 +35,8 @@ public:
 	     { return (sz<=short_max) ? short_max : sz+space;}
 
         //Access functions
-        const C* begin();
-        const C* end();
+        const C* begin() const;
+        const C* end() const;
 
 	//Destructor
 	~String() { if (short_max<sz) delete[] ptr;}
@@ -116,14 +116,14 @@ void String<C>::move_from(String<C>& x) {
 
 //Access function declarations
 template<typename C>
-const C* String<C>::begin() {
+const C* String<C>::begin() const {
 	
 	return ptr;
 
 }
 
 template<typename C>
-const C* String<C>::end() {
+const C* String<C>::end() const  {
 	
 	return ptr+sz;
 
@@ -132,7 +132,7 @@ const C* String<C>::end() {
 //Operator Declarations
 
 template<typename C>
-String<C>& String<C>::operator+=(C c) {
+String<C>& String<C>::operator+=(const C c) {
       
 	if (sz == short_max) {
 		
@@ -200,7 +200,7 @@ std::ostream& operator<<(std::ostream& os, String<C>& s) {
 }
 
 template<typename C>
-String<C>& operator+=(String<C>& a, String<C>& b) {
+String<C>& operator+=(String<C>& a, const String<C>& b) {
 	
 	for (auto ci : b) {
 
@@ -274,6 +274,15 @@ int main() {
 	String<char> maria(manika+'3');
 	std::cout<< maria << std::endl;
 	std::cout<< "Manika is " << manika << std::endl;
+
+// Test5 - + for more than 1 strings
+        //std::cout<< (nikos + manika) << std::endl;
+
+
+// Test6 - normal string
+	nikos += "manika lola"; // Does not work because I have not provided an implicit constructor
+	                        // from a C type string. so this would have been equivalent to nikos+= String("manika lola")
+
 
 	return 0;
 }
