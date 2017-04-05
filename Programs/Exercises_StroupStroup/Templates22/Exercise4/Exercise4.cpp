@@ -10,9 +10,9 @@ class String {
 public:
 	//Constructors
 	String() : sz{0}, ptr{ch} { ch[0] = 0; };
-	explicit String<C>(const C*) {};
-	String<C>(const String<C>& obj) { copy_from(obj); }; // copy constructor
-	String<C>(String<C>&& obj)      { move_from(obj); }; // move constructor
+	String(const String<C>& obj) { copy_from(obj); }; // copy constructor
+	String(String<C>&& obj)      { move_from(obj); }; // move constructor
+	explicit String(const C* c) : sz{std::strlen(c)},  ptr{(sz>short_max) ? ch : new C[sz+1]}, space{0} { std::strcpy(ptr,c);}
 
 	//Operators
 	String& operator=(const String<C>& x); // copy assignment
