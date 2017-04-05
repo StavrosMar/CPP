@@ -5,33 +5,6 @@
 #include <cstring>
 
 //String class declaration
-
-
-// My custom strlen
-namespace srv {
-
-template<typename C>
-int strlen(const C* c, int maxLen = 100000000 ) {
-	
-	int i = 0;
-
-	while ( (i + c) != NULL && i < maxLen ) {
-		
-		++i;
-
-	}
-
-	std::cout << "*i+x is equal to : " << (c+3) << std::endl;
-	
-	return i;
-
-};
-
-}
-
-		
-
-
 template<typename C>
 class String {
 public:
@@ -39,7 +12,7 @@ public:
 	String() : sz{0}, ptr{ch} { ch[0] = 0; };
 	String(const String<C>& obj) { copy_from(obj); }; // copy constructor
 	String(String<C>&& obj)      { move_from(obj); }; // move constructor
-	explicit String(const C* c) : sz{std::mblen(c)},  ptr{(sz>short_max) ? ch : new C[sz+1]}, space{0} { std::memcpy(ptr,c,sz+1);}
+	String(const C* c) : sz{std::strlen(c)},  ptr{(sz>short_max) ? ch : new C[sz+1]}, space{0} { std::strcpy(ptr,c);}
 
 	//Operators
 	String& operator=(const String<C>& x); // copy assignment
@@ -307,8 +280,7 @@ int main() {
 
 
 // Test6 - normal string
-	nikos += String<char>{"nik"}; // Does not work because I have not provided an implicit constructor
-	std::cout << nikos << "    olooooooooooooooa" << std::endl;
+	nikos += ("manika lola"); // Does not work because I have not provided an implicit constructor
 	                        // from a C type string. so this would have been equivalent to nikos+= String("manika lola")
 
 
