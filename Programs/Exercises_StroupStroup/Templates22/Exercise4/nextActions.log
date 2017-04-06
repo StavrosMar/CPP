@@ -1,1 +1,1 @@
-1) Fix bug on expand command - check last example for nikos in the main program
+1) Bug fixes  - am using strlen command  - could change that by providiing the length sz as argument or making the funciton a member but cannotbe bothered basically

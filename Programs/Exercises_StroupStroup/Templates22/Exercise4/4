@@ -98,8 +98,7 @@ template<typename T>
 T* expand(const T* ptr, int n) // expand into free store
 {
 	T* p = new T[n]; //allocate n positions to the free store
-//	std::strcpy(p,ptr);       //copy the value alt 1
-	std::memmove(p,ptr,std::strlen(ptr)); // copy value alt 2
+	std::memmove(p,ptr,sizeof(p));       //copy the value
 	return p;
 }
 
@@ -164,9 +163,9 @@ String<C>& String<C>::operator+=(const C c) {
       
 	if (sz == short_max) {
 		
-		int n = sz + sz + 2;
+		int n = sz + sz + 1;
 		ptr = expand(ptr,n);
-		space = n-sz-2;
+		space = n-sz-1;
 		std::cout << "firstIf" << std::endl;
 
 	}
@@ -174,11 +173,11 @@ String<C>& String<C>::operator+=(const C c) {
 	
 		if ( space == 0 ) {
 			
-			int n = sz+sz+2;
+			int n = sz+sz+1;
 			C* p = expand(ptr,n);
 			delete[] ptr;
 			ptr = p;
-			space = n-sz-2;
+			space = n-sz-1;
 			
 		}
 		else 
@@ -266,7 +265,7 @@ int main() {
         manika+='9';	
 
         std::cout<<manika<<std::endl;      
-/*
+
 //Test2 - String test for ints
 	String<int> patrika;
         patrika+=1;	
@@ -280,7 +279,7 @@ int main() {
 	stavros+=4;
 	patrika+=stavros;
         std::cout<<patrika<<std::endl;
-*/
+
 // Test 4a - copy from
 
 	String<char> lola{manika};
@@ -315,7 +314,7 @@ int main() {
 
 
 	//Operator += test
-	nikos += String<char>{"abcdefghijklmnoprstuvwxyz"}; // Does not work because I have not provided an implicit constructor
+	nikos += String<char>{"abcdefghijklmnopqrstuvwxyz"}; // Does not work because I have not provided an implicit constructor
 	std::cout << nikos << "D" << std::endl;
 	                        // from a C type string. so this would have been equivalent to nikos+= String("manika lola")
 
