@@ -39,7 +39,7 @@ public:
 	String() : sz{0}, ptr{ch} { ch[0] = 0; };
 	String(const String<C>& obj) { copy_from(obj); }; // copy constructor
 	String(String<C>&& obj)      { move_from(obj); }; // move constructor
-	explicit String(const C* c) : sz{std::mblen(c)},  ptr{(sz>short_max) ? ch : new C[sz+1]}, space{0} { std::memcpy(ptr,c,sz+1);}
+	explicit String(const C* c) : sz{std::strlen(c)},  ptr{(sz<=short_max) ? ch : new C[sz+1]}, space{0} { std::memmove(ptr, c, sizeof(C)*(sz+1) );}
 
 	//Operators
 	String& operator=(const String<C>& x); // copy assignment
@@ -258,7 +258,6 @@ String<C> operator+(const String<C>& a,const C& c) {
 // Main - Entry point //
 int main() {
 
-
 //Test1 - String test for chars
 	String<char> manika;
         manika+='8';	
@@ -307,8 +306,15 @@ int main() {
 
 
 // Test6 - normal string
-	nikos += String<char>{"nik"}; // Does not work because I have not provided an implicit constructor
-	std::cout << nikos << "    olooooooooooooooa" << std::endl;
+	
+	//Constructor test
+	String<char> pappous{"Ioannis Leftheriotis ths Annas kai tou Giorgi"}; // explicit C-style string constructor called
+	std::cout << "Pappous = " << pappous << std::endl;
+
+
+	//Operator += test
+	nikos += String<char>{"123456789101"}; // Does not work because I have not provided an implicit constructor
+	std::cout << nikos << "e" << std::endl;
 	                        // from a C type string. so this would have been equivalent to nikos+= String("manika lola")
 
 

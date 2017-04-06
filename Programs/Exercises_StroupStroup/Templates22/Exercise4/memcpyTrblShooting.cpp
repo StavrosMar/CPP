@@ -17,7 +17,7 @@ int main ()
    
    typedef char typos;
    
-   typos lola = "nikofl";
+   typos* lola = "nikofl";
    typos* nikos{lola};
    
    std::cout << "The size of lola is :" << sizeof(lola) << std::endl;

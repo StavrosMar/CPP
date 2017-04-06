@@ -1,1 +1,1 @@
-) string+char+stirng or string+char+char not working --> maybe because the operators need to be defined explicitly for rvalues e.g. string+char is an rvalue 
+1) Fix bug on expand command - check last example for nikos in the main program
