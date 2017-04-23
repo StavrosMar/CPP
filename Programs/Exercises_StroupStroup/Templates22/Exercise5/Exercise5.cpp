@@ -3,6 +3,7 @@
 
 #include<iostream>
 #include<iterator>
+#include<algorithm>
 
 // Class declarations
 
@@ -10,15 +11,14 @@
 
 // sort function template
 	// Option 1 - using sort from std
-void template<typename T>
-sort(const iterator &a,const iterator &b) {
+template<typename T>
+void sort(std::iterator &a, std::iterator &b) {
 
 	// Cross fingers it works
-	Comp criteria(&T); 
+//	Comp criteria(&T); 
 	
 	// std::sort needs Compare type as input
-	std::sort(&a, &b, &criteria);
-	
+//	std::sort(&a, &b, &criteria);
 }
 
 // print function
@@ -39,11 +39,9 @@ int main() {
 
 	std::vector<int> vec0{1,2,3};
 	
-		sort(vec0);
-	
-		std::cout<< "The sorted vector is the following : " << std::endl;
-		printVec( vec0.begin(), vec0.end() )<< std::endl;
-	
-	}
+//	sort(vec0.begin(), vec0.end());
+/*
+	std::cout<< "The sorted vector is the following : " << std::endl;
+	printVec( vec0.begin(), vec0.end() )<< std::endl;
+*/	
 
-}
