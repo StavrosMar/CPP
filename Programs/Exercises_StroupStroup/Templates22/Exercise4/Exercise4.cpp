@@ -167,8 +167,6 @@ String<C>& String<C>::operator+=(const C c) {
 		int n = sz + sz + 2;
 		ptr = expand(ptr,n);
 		space = n-sz-2;
-		std::cout << "firstIf" << std::endl;
-
 	}
 	else if (short_max < sz) {
 	
