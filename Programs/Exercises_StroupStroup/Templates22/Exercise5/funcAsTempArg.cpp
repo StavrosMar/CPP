@@ -3,20 +3,20 @@
 
 #include <iostream>
 
-int f(int x) { return 2 * x; }
-int g(int x) { return -3 * x; }
+const char* f(int x) { return "skl"; }
+const char* g(int x) { return "fsl"; }
 
 // Take a look at : https://en.wikipedia.org/wiki/Typedef
-typedef int (*F)(int);
+typedef const char* (*F)(int);
 
 template<F f> 
-int do_work() 
+const char* do_work() 
 { 
     return f(7);
 } 
 
 int main()
 {
-    std::cout << do_work<f>() << '\n'
-              << do_work<g>() << '\n'; 
+    std::cout << do_work<*****f>() << '\n'
+              << do_work<******g>() << '\n'; 
 }
