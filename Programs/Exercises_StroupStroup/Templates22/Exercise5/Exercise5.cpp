@@ -40,25 +40,25 @@ typedef bool (*F)(const int&,const int&); //!! typedef required for Comparison F
 namespace stavros {
 	
 	//!!Temporary 
-	typedef int T;
+//	typedef int T;
 
 	// sort
-	template<F f>       //!! F f instead of typename F
+	template<typename T, F f<T> >       //!! F f instead of typename F
 	void sort() {
 		int a = 1;
 		int b = 2;
-		f(a,b);     //!! inline with the typedef above
+		f<T>(a,b);     //!! inline with the typedef above
 	};
 	
 	// Comparison function : greater
-	//template<typename T>
+	template<typename T>
 	bool greater(const T &a,const T &b) {
 	
 		return (a > b) ? true : false;
 	}
 	
 	// Comparison function : smaller
-	//template<typename T>
+	template<typename T>
 	bool smaller(const T &a, const T &b) {
 	
 		return (a < b) ? true : false;
@@ -73,7 +73,7 @@ int main() {
 	std::vector<int> vec0{1,2,3};
 	
 	//std::cout<<stavros::greater<int>(1,2)<<std::endl;;
-	stavros::sort<stavros::greater>();
+	stavros::sort<stavros::greater<int>>();
 
 //	sort(vec0.begin(), vec0.end());
 /*
