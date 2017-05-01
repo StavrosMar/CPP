@@ -6,3 +6,5 @@
 
 	( &f)(); f(); (*f)(); (**f)(); (***f)();
 	pf(); (*pf)(); (**pf)(); (***pf)();
+
+2) function pointers £ function objects (this is essentially a class)
