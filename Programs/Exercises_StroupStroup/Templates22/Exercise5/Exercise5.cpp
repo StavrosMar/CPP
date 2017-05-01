@@ -1,4 +1,4 @@
-// Templates 23 - Exercise 5 - sort 
+// Templates 23 - Exercise 5 - sort -
 // This is the sort converted to a templated version
 
 #include<vector>
@@ -6,7 +6,6 @@
 #include<iterator>
 #include<algorithm>
 #include<functional>
-
 
 // namespace - sort to be used with function pointers as comp criteria
 namespace fp {
