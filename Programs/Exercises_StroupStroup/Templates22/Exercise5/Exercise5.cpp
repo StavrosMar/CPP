@@ -35,19 +35,14 @@ void printVec( iterator a, iterator b) {
 }
 */
 
-typedef bool (*F)(const int&,const int&); //!! typedef required for Comparison Functions
-
 namespace stavros {
 	
-	//!!Temporary 
-//	typedef int T;
-
 	// sort
-	template<typename T, F f<T> >       //!! F f instead of typename F
+	template<typename T, bool (*f)(const T&, const T&)>       //!! F f instead of typename F. #Non-type template param
 	void sort() {
 		int a = 1;
 		int b = 2;
-		f<T>(a,b);     //!! inline with the typedef above
+		f(a,b);     //!! inline with the typedef above
 	};
 	
 	// Comparison function : greater
@@ -73,7 +68,7 @@ int main() {
 	std::vector<int> vec0{1,2,3};
 	
 	//std::cout<<stavros::greater<int>(1,2)<<std::endl;;
-	stavros::sort<stavros::greater<int>>();
+	stavros::sort<int,stavros::greater<int>>;
 
 //	sort(vec0.begin(), vec0.end());
 /*
