@@ -24,15 +24,27 @@ public :
 //-// Comp is for the function object used for the comparison
 //-// C is for the object member i want to sort on
 
-template<typename T,typename Comp, typename C>
-bool compwrapper(const& T obj1, const& T obj2) {
-	
-	//how the hell am i going to pass the member ? pointer maybe?
-	C memsort;
-	
-	//execute operator on the member 
-	obj1.memsortComp()
-	
+template<typename T,typename Comp>
+class compwrapper {
+
+private:
+
+	auto memb;
+
+public:
+
+       compwrapper(auto& T::member) : memb{
+
+       bool operator() (const& T obj1, const& T obj2) {
+       	
+              //how the hell am i going to pass the member ? pointer maybe?
+              C memsort;
+              
+              //execute operator on the member 
+              obj1.memsorVtComp();
+       
+       }
+
 }
 
 
@@ -48,9 +60,16 @@ sort<std::greater<int>>(svec.begin(),svec.end());
 
 std::vector<Record<int>> vecRec{Record<int>(10,1), Record<int>(4,100)};
 
+// Attempt1
 fo::sort<std::greater<Record<int>>()>(vecRec.begin(),vecRec.end());
+
+//Comparison Object creation required.
+compwrapper<Record<int>,std::greater<int>> CompareOnPrice{Record<int>::price};
+
+// Attempt2
+fo::sort< compwrapper<std::vector<int>,std::greater<int>,
 
 return 0;
 
-
+}
 
