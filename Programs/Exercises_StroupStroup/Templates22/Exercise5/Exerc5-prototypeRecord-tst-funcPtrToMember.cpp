@@ -1,6 +1,7 @@
 // This is an auxiliary file to aid us understand
 // the process of creating a function that receives a pointer to 
 // a class member so that we can call it with different members as arguments
+// - More info found in StrouStroup 20.6 - Pointers to Members
 
 #include <iostream>
 
