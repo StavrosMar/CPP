@@ -77,7 +77,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<C> &vec) {
 
 		
 
-// main 
+// Main for testing functions in this file
 int mainTestThisfunction() {
 
 	// Testing funPointer fp:sort

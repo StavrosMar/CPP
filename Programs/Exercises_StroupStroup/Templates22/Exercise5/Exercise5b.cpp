@@ -1,5 +1,5 @@
 // Exercise 5b - Record and sort on count and price 
-//This is a prototype fpr 
+// Functions developed for Exercise5.cpp are used here 
 
 #include <iostream>
 #include <string>
@@ -63,6 +63,27 @@ public:
 };
 
 
+template<typename T,typename Comp, typename member>
+class compwrapper_2 {
+
+private:
+	//This is the pointer to memebr - for count and price types
+	//using Pm = const memType T::*;
+	
+public:
+       
+       bool operator() (const T& obj1, const T& obj2) const {
+       	
+              
+		//Run the comparison function execute operator on the member
+	          //It is running the overloaded () operator
+	
+		//bool result = Comp()(obj1.*member, obj2.*member);
+		bool result = 0;
+ 		return result;
+ 	}
+
+};
 
 int main() {
 
@@ -80,7 +101,8 @@ CompareOnPrice.operator()(vecRec[0],vecRec[1]);
 
 // Attempt1
 
-fo::sort<Cmpr(&Record<int>::price)> (vecRec.begin(),vecRec.end());
+using Cmpr_2 = compwrapper_2<Record<int>,std::greater<int>,&Record<int>::price>;
+fo::sort<Cmpr_2> (vecRec.begin(),vecRec.end());
 
 std::cout<<"The sorting order of the Records according\n to the sorting criteria selected is the following\n"<<std::endl;
 
