@@ -16,8 +16,10 @@ public :
 	
 	
 	// public members
-	T count;
-	T price;
+	const T count;
+	const T price;
+	
+	static int id;
 	
 	//Learning - function members
 	const T* price_ptr = &price;
@@ -47,20 +49,16 @@ public:
        //-// Construction of the wrapper based on the function pointer passed.
        compwrapper(Pm mem) : member{mem} {};
 
-       bool operator() (const T& obj1, const T& obj2) {
+       bool operator() (const T& obj1, const T& obj2) const {
        	
-              // - Question : How am i going to pass the member ? pointer maybe?
-	      //   Answer   : pointer to member already passed during construction.
-	      //              Nothing to worry about now - just implement normal 
-	      //              functionality
- //             C memsort;
               
-              //execute operator on the member 
- //             obj1.memsorVtComp();
- 
- 
- 			return 0;
- 		}
+		//Run the comparison function execute operator on the member
+	          //It is running the overloaded () operator
+	
+		bool result = Comp()(obj1.*member, obj2.*member);
+
+ 		return result;
+ 	}
 
 };
 
@@ -73,14 +71,20 @@ int main() {
 
 std::vector<Record<int>> vecRec{Record<int>(10,1), Record<int>(4,100)};
 
+using Cmpr = compwrapper<Record<int>,std::greater<int>,int>;
+
 //Comparison Object creation
-compwrapper<Record<int>,std::greater<int>,int> CompareOnPrice{&Record<int>::price};
+const Cmpr CompareOnPrice{&Record<int>::price};
+//-// test on operator
+CompareOnPrice.operator()(vecRec[0],vecRec[1]);
+
+// Attempt1
+
+fo::sort<Cmpr(&Record<int>::price)> (vecRec.begin(),vecRec.end());
+
+std::cout<<"The sorting order of the Records according\n to the sorting criteria selected is the following\n"<<std::endl;
 
 /*
-// Attempt2
-fo::sort< CompareOnPrice() >; 
-
-
 // Attempt1
 fo::sort<std::greater<Record<int>>>(vecRec.begin(),vecRec.end());
 */
