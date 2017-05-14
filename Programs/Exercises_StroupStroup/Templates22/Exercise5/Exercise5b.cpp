@@ -33,27 +33,16 @@ public :
 //-// Comp is for the function object used for the comparison
 //-// C is for the object member i want to sort on
 
-template<typename T,typename Comp, typename memType>
+template<typename T,typename Comp, typename memType, const memType T::*member>
 class compwrapper {
-
-private:
-	//This is the pointer to memebr - for count and price types
-	using Pm = const memType T::*;
-	
-	//Pointer to member of type T e.g. Record
-	Pm member; 
 
 public:
        
-       // Constructors
-       //-// Construction of the wrapper based on the function pointer passed.
-       compwrapper(Pm mem) : member{mem} {};
-
        bool operator() (const T& obj1, const T& obj2) const {
        	
               
-		//Run the comparison function execute operator on the member
-	          //It is running the overloaded () operator
+		/*Run the comparison function execute operator on the member
+	          It is running the overloaded () operator*/
 	
 		bool result = Comp()(obj1.*member, obj2.*member);
 
@@ -63,28 +52,6 @@ public:
 };
 
 
-template<typename T,typename Comp, typename member>
-class compwrapper_2 {
-
-private:
-	//This is the pointer to memebr - for count and price types
-	//using Pm = const memType T::*;
-	
-public:
-       
-       bool operator() (const T& obj1, const T& obj2) const {
-       	
-              
-		//Run the comparison function execute operator on the member
-	          //It is running the overloaded () operator
-	
-		//bool result = Comp()(obj1.*member, obj2.*member);
-		bool result = 0;
- 		return result;
- 	}
-
-};
-
 int main() {
 
 
@@ -92,24 +59,12 @@ int main() {
 
 std::vector<Record<int>> vecRec{Record<int>(10,1), Record<int>(4,100)};
 
-using Cmpr = compwrapper<Record<int>,std::greater<int>,int>;
-
-//Comparison Object creation
-const Cmpr CompareOnPrice{&Record<int>::price};
-//-// test on operator
-CompareOnPrice.operator()(vecRec[0],vecRec[1]);
-
 // Attempt1
 
-using Cmpr_2 = compwrapper_2<Record<int>,std::greater<int>,&Record<int>::price>;
-fo::sort<Cmpr_2> (vecRec.begin(),vecRec.end());
+using Cmpr = compwrapper<Record<int>,fo::greater<int>,int,&Record<int>::count>;
+fo::sort<Cmpr> (vecRec.begin(),vecRec.end());
 
 std::cout<<"The sorting order of the Records according\n to the sorting criteria selected is the following\n"<<std::endl;
-
-/*
-// Attempt1
-fo::sort<std::greater<Record<int>>>(vecRec.begin(),vecRec.end());
-*/
 
 
 //TODO-Start - move these to the ptr to member relevant file.
