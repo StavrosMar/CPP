@@ -8,24 +8,32 @@
 
 template<typename T>
 class Record {
+private:
+
+	std::string name;
 
 public :
 
 	// Constructor 
-	Record(const T& c,const T& p) : count{c}, price{p} {};
+	Record(const T& c,const T& p,const std::string& n) : count{c}, price{p}, name{n} {};
 	
 	
 	// public members
-	const T count;
-	const T price;
+	T count;
+	T price;
 	
-	static int id;
-	
+	// Operators
+	//-// << operator for printing the name
+	friend std::ostream& operator<<(std::ostream& out, const Record& rec) {
+
+		out<<rec.name;
+		return out;
+	}
+
 	//Learning - function members
 	const T* price_ptr = &price;
-	void donothing() const {
-		
-	}
+	void donothing() const {};
+	
 };
 
 // Comparison wrapper - generic use for the following:
@@ -55,16 +63,28 @@ public:
 int main() {
 
 
-// Sort on Record data memebers
+//Build Vector
 
-std::vector<Record<int>> vecRec{Record<int>(10,1), Record<int>(4,100)};
+std::vector<Record<int>> vecRec{Record<int>(10,1,"A"), Record<int>(4,100,"B")};
 
-// Attempt1
+// Sorting on count
 
-using Cmpr = compwrapper<Record<int>,fo::greater<int>,int,&Record<int>::count>;
-fo::sort<Cmpr> (vecRec.begin(),vecRec.end());
+using Cmpr_count = compwrapper<Record<int>,std::greater<int>,int,&Record<int>::count>;
 
-std::cout<<"The sorting order of the Records according\n to the sorting criteria selected is the following\n"<<std::endl;
+fo::sort<Cmpr_count> (vecRec.begin(),vecRec.end());
+
+std::cout<<"------Sorting on \"count\" : \n"<<vecRec<<std::endl;
+
+// Sorting on price
+
+using Cmpr_price = compwrapper<Record<int>,std::greater<int>,int,&Record<int>::price>;
+
+fo::sort<Cmpr_price> (vecRec.begin(),vecRec.end());
+
+std::cout<<"------Sorting on \"price\" : \n"<<vecRec<<std::endl;
+
+
+// END of Exercise 5b
 
 
 //TODO-Start - move these to the ptr to member relevant file.
