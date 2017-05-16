@@ -141,8 +141,7 @@ void String<C>::move_from(String<C>& x) {
 		x.ch[0]=0;
 	}
 }
-
-//Access function declarations
+ //Access functions
 template<typename C>
 const C* String<C>::begin() const {
 	
@@ -218,14 +217,18 @@ String<C>& String<C>::operator=(String<C>&& x) { // move assignment
 template<typename C>
 std::ostream& operator<<(std::ostream& os, const String<C>& s) {
 	
-	for(auto x : s ) {   // String must have begin() and end()
-                             // for more  constPointersForLoop.cpp 
+	for(auto x : s ) {   // in order auto to work String must have begin() and end() functions defined.
 		os<<x;
+		//std::cout<<s.begin[i]<<std::endl;
 	}
 
 	return os;
 }
 
+<<<<<<< HEAD
+//template<typename C>
+//String<C>& operator+=
+=======
 template<typename C>
 String<C>& operator+=(String<C>& a, const String<C>& b) {
 	
@@ -236,6 +239,7 @@ String<C>& operator+=(String<C>& a, const String<C>& b) {
 	std::cout << "Kalestike" << std::endl;	
 	return a;
 }
+>>>>>>> b968307f43411e924fc0a455ec5c7edd556044f9
 
 template<typename C>
 String<C> operator+(const String<C>& a, const String<C>& b) {
@@ -271,6 +275,10 @@ int main() {
         patrika+=2;	
 
         std::cout<<patrika<<std::endl;      
+<<<<<<< HEAD
+ //       std::cout<<*begin(manika)<<std::endl;      
+ 	
+=======
  
 // Test3 - += operator test for strings
         
@@ -318,5 +326,6 @@ int main() {
 	                        // from a C type string. so this would have been equivalent to nikos+= String("manika lola")
 
 
+>>>>>>> b968307f43411e924fc0a455ec5c7edd556044f9
 	return 0;
 }
