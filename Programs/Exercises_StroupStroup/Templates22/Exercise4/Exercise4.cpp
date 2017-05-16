@@ -326,6 +326,5 @@ int main() {
 	                        // from a C type string. so this would have been equivalent to nikos+= String("manika lola")
 
 
->>>>>>> b968307f43411e924fc0a455ec5c7edd556044f9
 	return 0;
 }
