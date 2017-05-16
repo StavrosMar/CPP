@@ -5,33 +5,6 @@
 #include <cstring>
 
 //String class declaration
-
-
-// My custom strlen
-namespace srv {
-
-template<typename C>
-int strlen(const C* c, int maxLen = 100000000 ) {
-	
-	int i = 0;
-
-	while ( (i + c) != NULL && i < maxLen ) {
-		
-		++i;
-
-	}
-
-	std::cout << "*i+x is equal to : " << c << std::endl;
-	
-	return i;
-
-};
-
-}
-
-		
-
-
 template<typename C>
 class String {
 public:
@@ -39,7 +12,7 @@ public:
 	String() : sz{0}, ptr{ch} { ch[0] = 0; };
 	String(const String<C>& obj) { copy_from(obj); }; // copy constructor
 	String(String<C>&& obj)      { move_from(obj); }; // move constructor
-	explicit String(const C* c) : sz{ int(std::strlen(c)) },  ptr{(sz<=short_max) ? ch : new C[sz+1]}, space{0} { std::memmove(ptr, c, sizeof(C)*(sz+1) );}
+	String(const C* c) : sz{std::strlen(c)},  ptr{(sz>short_max) ? ch : new C[sz+1]}, space{0} { std::strcpy(ptr,c);}
 
 	//Operators
 	String& operator=(const String<C>& x); // copy assignment
@@ -98,8 +71,7 @@ template<typename T>
 T* expand(const T* ptr, int n) // expand into free store
 {
 	T* p = new T[n]; //allocate n positions to the free store
-//	std::strcpy(p,ptr);       //copy the value alt 1
-	std::memmove(p,ptr,std::strlen(ptr)); // copy value alt 2
+	*p = *ptr;       //copy the value
 	return p;
 }
 
@@ -141,7 +113,8 @@ void String<C>::move_from(String<C>& x) {
 		x.ch[0]=0;
 	}
 }
- //Access functions
+
+//Access function declarations
 template<typename C>
 const C* String<C>::begin() const {
 	
@@ -166,6 +139,7 @@ String<C>& String<C>::operator+=(const C c) {
 		int n = sz + sz + 2;
 		ptr = expand(ptr,n);
 		space = n-sz-2;
+
 	}
 	else if (short_max < sz) {
 	
@@ -217,18 +191,14 @@ String<C>& String<C>::operator=(String<C>&& x) { // move assignment
 template<typename C>
 std::ostream& operator<<(std::ostream& os, const String<C>& s) {
 	
-	for(auto x : s ) {   // in order auto to work String must have begin() and end() functions defined.
+	for(auto x : s ) {   // String must have begin() and end()
+                             // for more  constPointersForLoop.cpp 
 		os<<x;
-		//std::cout<<s.begin[i]<<std::endl;
 	}
 
 	return os;
 }
 
-<<<<<<< HEAD
-//template<typename C>
-//String<C>& operator+=
-=======
 template<typename C>
 String<C>& operator+=(String<C>& a, const String<C>& b) {
 	
@@ -236,10 +206,9 @@ String<C>& operator+=(String<C>& a, const String<C>& b) {
 
 		a+=ci;
 	}
-	std::cout << "Kalestike" << std::endl;	
+	
 	return a;
 }
->>>>>>> b968307f43411e924fc0a455ec5c7edd556044f9
 
 template<typename C>
 String<C> operator+(const String<C>& a, const String<C>& b) {
@@ -262,23 +231,20 @@ String<C> operator+(const String<C>& a,const C& c) {
 // Main - Entry point //
 int main() {
 
+
 //Test1 - String test for chars
 	String<char> manika;
         manika+='8';	
         manika+='9';	
 
         std::cout<<manika<<std::endl;      
-/*
+
 //Test2 - String test for ints
 	String<int> patrika;
         patrika+=1;	
         patrika+=2;	
 
         std::cout<<patrika<<std::endl;      
-<<<<<<< HEAD
- //       std::cout<<*begin(manika)<<std::endl;      
- 	
-=======
  
 // Test3 - += operator test for strings
         
@@ -286,7 +252,7 @@ int main() {
 	stavros+=4;
 	patrika+=stavros;
         std::cout<<patrika<<std::endl;
-*/
+
 // Test 4a - copy from
 
 	String<char> lola{manika};
@@ -314,18 +280,9 @@ int main() {
 
 
 // Test6 - normal string
-	
-	//Constructor test
-	String<char> pappous{"Ioannis Leftheriotis ths Annas kai tou Giorgi"}; // explicit C-style string constructor called
-	std::cout << "Pappous = " << pappous << std::endl;
-
-
-	//Operator += test
-	nikos += String<char>{"abcdefghijklmnoprstuvwxyz"}; // Does not work because I have not provided an implicit constructor
-	std::cout << nikos << "D" << std::endl;
+	nikos += ("manika lola"); // Does not work because I have not provided an implicit constructor
 	                        // from a C type string. so this would have been equivalent to nikos+= String("manika lola")
 
 
->>>>>>> b968307f43411e924fc0a455ec5c7edd556044f9
 	return 0;
 }

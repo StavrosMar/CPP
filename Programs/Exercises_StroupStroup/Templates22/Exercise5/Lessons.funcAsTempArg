@@ -1,0 +1,10 @@
+1) Function pointers  (http://stackoverflow.com/questions/12152167/why-is-using-the-function-name-as-a-function-pointer-equivalent-to-applying-them):
+	
+	Pointers to functions may be used either as (*pf)() or as pf().
+
+	Then all of the following expressions are valid function calls :
+
+	( &f)(); f(); (*f)(); (**f)(); (***f)();
+	pf(); (*pf)(); (**pf)(); (***pf)();
+
+2) function pointers £ function objects (this is essentially a class)
