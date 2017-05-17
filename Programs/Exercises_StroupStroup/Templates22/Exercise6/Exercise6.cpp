@@ -17,10 +17,16 @@
 
 namespace stavros {
 
+
 // Qsort Implementation
+
+
+	template<typename T, typename Comp>
+	void qsort(void *ptr, const std::size_t count,const std::size_t size, const bool* Comp::* comp) {
+
 	
-	template<typename T, typename RIter>
-	void qsort(const RIter beg, const RIter end) {
+
+		//qsort(
 
 
 
@@ -39,16 +45,17 @@ int main() {
 
 	
 	int* mat[2][2];
+	constexpr std::size_t mat_size = sizeof mat / sizeof *mat;
 
 	// Call qsort
 	
 	std::vector<int> vec{1,2,3};
-	stavros::qsort<int>(vec.begin(),vec.end());
+	//stavros::qsort<int>(mat,4,sizeof *mat, std::greater());
+	stavros::qsort<int>(mat, mat_size , sizeof *mat, &std::greater<int>());
 
 	//TODO 
 	/*
 	1) Support for sorting criteria - either via template or function pointer
-
 
 
 	*/
