@@ -17,6 +17,9 @@ public:
 	int apple;
 	int orange;
 
+	//Learning - function members
+	const int* apple_ptr = &apple;
+	void donothing() const {};
 };
 
 
@@ -50,5 +53,22 @@ int main() {
 	//-// Count oranges - pass pointer
 	printFruit(&today, &FruitBasket::orange);
 
+
+        //Pointer to data member test
+         //-// Case 1 : Class member is not a pointer
+         using Ptrm = const int FruitBasket::*;
+         Ptrm pp(&FruitBasket::apple);
+         
+         //-// Case 2 : Class member is a pointer
+         using Ptrm_ptr = const int* FruitBasket::*;
+         Ptrm_ptr pp_ptr(&FruitBasket::apple_ptr);
+         
+         //-// Case 3 : Class member is a function taking 0 arguments
+         using Ptrm_func = void (FruitBasket::*)() const;
+         Ptrm_func dnfunc(&FruitBasket::donothing);
+         
+         //-// Case 4 : memeber is a pointer to a function
+               // *f = f so same as Case 3
+        
 	return 0;
 }

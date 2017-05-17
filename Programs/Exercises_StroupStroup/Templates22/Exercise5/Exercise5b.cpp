@@ -29,10 +29,6 @@ public :
 		out<<rec.name;
 		return out;
 	}
-
-	//Learning - function members
-	const T* price_ptr = &price;
-	void donothing() const {};
 	
 };
 
@@ -83,30 +79,7 @@ fo::sort<Cmpr_price> (vecRec.begin(),vecRec.end());
 
 std::cout<<"------Sorting on \"price\" : \n"<<vecRec<<std::endl;
 
-
-// END of Exercise 5b
-
-
-//TODO-Start - move these to the ptr to member relevant file.
-
-//Pointer to data member test
-//-// Case 1 : member is not a pointer
-using Ptrm = const int Record<int>::*;
-Ptrm pp(&Record<int>::price);
-
-//-// Case 2 : member is a pointer
-using Ptrm_ptr = const int* Record<int>::*;
-Ptrm_ptr pp_ptr(&Record<int>::price_ptr);
-
-//-// Case 3 : member is a function
-using Ptrm_func = void (Record<int>::*)() const;
-Ptrm_func dnfunc(&Record<int>::donothing);
-
-//-// Case 4 : memeber is a pointer to a function
-      // *f = f so same as Case 3
-
-//TODO-End
-
+// The party it's over. (George Papandreou, Former president of Greece, Teaching in Harvard....)
 return 0;
 
 }
