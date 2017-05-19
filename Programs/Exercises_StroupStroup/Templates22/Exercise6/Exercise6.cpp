@@ -21,8 +21,8 @@ namespace stavros {
 // Qsort Implementation
 
 
-	template<typename T>
-	void qsort(T *begin, const std::size_t count,const std::size_t size,bool (std::greater<int>::*)(const T&, const T&) const ) {
+	template<typename T,typename Comp>
+	void qsort(T *begin, const std::size_t count,const std::size_t size,bool (Comp::*)(const T&, const T&) const ) {
 		//qsort(
 
 
