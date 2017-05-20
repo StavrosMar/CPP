@@ -22,19 +22,16 @@ namespace stavros {
 
 	// Comp is a function pointer to the member of class Comp
 	template<typename T,typename Comp>
-	void qsort(T *begin, const std::size_t count,const std::size_t size,bool (Comp::*)(const T&, const T&) const ) {
+	void qsort(T* begin, const std::size_t count,const std::size_t size,bool (Comp::*)(const T&, const T&) const ) {
 
-		int a=10;
-		int b=29;
 		
+		std::qsort(begin, count, size, [](const void *a, const void *b){			
 		// Execute the function pointer passed with the arguments
-		std::cout<<Comp()(a,b)<<std::endl;
 
-		std::qsort(begin, count, size, [](const void *a, const void *b){
-				
-				
 				int aux_var{Comp()(*(int*)a,*(int*)b)};
+			
 				return aux_var;
+		
 			}
 		);
 
@@ -44,6 +41,25 @@ namespace stavros {
 	}
 
 
+	// Comp is a function pointer to the member of class Comp
+	template<typename RIter, typename T,typename Comp>
+	void qsort(RIter begin, const std::size_t count,const std::size_t size,bool (Comp::*)(const T&, const T&) const ) {
+
+		
+		std::qsort(begin, count, size, [](const void *a, const void *b){			
+		// Execute the function pointer passed with the arguments
+
+				int aux_var{Comp()(*(int*)a,*(int*)b)};
+			
+				return aux_var;
+		
+			}
+		);
+
+		//Do stuff
+
+
+	}
 
 
 }
@@ -94,7 +110,7 @@ int main() {
 	
 	//-//Call sort
 
-	//stavros::qsort<int>(vec.begin(), vec.size() , sizeof vec[0], &std::greater<int>::operator());
+	stavros::qsort<int>(vec.begin(), vec.size() , sizeof vec[0], &std::greater<int>::operator());
 	
 	//-//Print results
 	
