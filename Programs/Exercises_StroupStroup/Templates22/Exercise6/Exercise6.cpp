@@ -15,7 +15,7 @@ namespace stavros {
 
 // Qsort Implementation
 
-/*
+
 	// Comp is a function pointer to the member of class Comp
 	template<typename T,typename Comp>
 	void qsort(T* begin, const std::size_t count,const std::size_t size,bool (Comp::*)(const T&, const T&) const ) {
@@ -35,30 +35,6 @@ namespace stavros {
 
 
 	}
-
-*/
-	// Comp is a function pointer to the member of class Comp
-	template<typename T, typename RIter, typename Comp>
-	void qsort(RIter begin, const std::size_t count,const std::size_t size,bool (Comp::*)(const T&, const T&) const ) {
-
-	
-		// iterator to pointer 
-		auto begin_under_val{*begin};
-
-		std::qsort(&begin_under_val, count, size, [](const void *a, const void *b){			
-		// Execute the function pointer passed with the arguments
-
-				int aux_var{Comp()(*(int*)a,*(int*)b)};
-			
-				return aux_var;
-		
-			}
-		);
-
-		//Do stuff
-
-	}
-
 
 } 
 
@@ -80,7 +56,7 @@ void print_Entity(const T* begin, const T* end) {
 int main() {
 
 
-/*	
+	
 //TEST1 - Sorting Matrices
 	
 	//-// Setup matrix
@@ -100,30 +76,6 @@ int main() {
 	//-//Print results
 	
 	print_Entity(begin,end);
-*/
-
-//TEST2 - Sorting Containers (e.g. objects with iterators)
-	
-	std::vector<int> vec{0,1};
-	
-	std::array<int,10> arr{19,1,19};
-
-	//-//Call sort
-
-	stavros::qsort<int>(vec.begin(), vec.size() , sizeof vec[0], &std::greater<int>::operator());
-
-	//-//Print results
-	
-	print_Entity(&(*vec.begin()),&(*vec.end()));
-
-
-	//TODO 
-	/*
-	1) Support for sorting criteria - either via template or function pointer
-
-
-	*/
-
 
 	return 0;
 
