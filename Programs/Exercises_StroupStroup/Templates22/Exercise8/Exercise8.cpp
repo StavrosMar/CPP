@@ -46,8 +46,8 @@ class Map : public Assoc {
 
 public:
 	//Constructors
-	//Map(VecOfPairs& vinput) { vec = vinput;};
-	Map(VecOfPairs& vinput) : Assoc(vinput) {};
+
+	Map(VecOfPairs& vinput) : Assoc::Assoc(vinput) {}; //Run Assoc constructor
 	
 	void print_elemlast(){
 		
