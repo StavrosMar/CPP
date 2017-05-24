@@ -12,9 +12,10 @@
 #include <vector>
 
 // Assoc Definition
+template<typename S>
 class Assoc {
 public:	
-	using VecOfPairs = std::vector<std::pair<std::string,int>>;
+	using VecOfPairs = std::vector<std::pair<S,int>>;
 	
 	// Plain members
 	VecOfPairs vec;
@@ -22,13 +23,17 @@ public:
 	Assoc(VecOfPairs& inVec) : vec (inVec) {};	
 	
 	// Operators
-	const int& operator[](const std::string&) const;
-	int& operator[](const std::string&);
+	const int& operator[](const S&) const;
+	int& operator[](const S&);
+
+	//Test stavros
+	int mary = 0;
 
 };
 
 //-// Assoc::operator[] declaration
-int& Assoc::operator[](const std::string& s) {
+template<typename S>
+int& Assoc<S>::operator[](const S& s) {
 	
 	// search for s; return a reference to its value if found;
 	// otherwise, make a new pair {s,0} and return a reference to its value
@@ -42,25 +47,35 @@ int& Assoc::operator[](const std::string& s) {
 }
 
 // Map Definition
-class Map : public Assoc {
+template<typename T>
+class Map : public Assoc<T> {
 
 public:
 	//Constructors
 
-	Map(VecOfPairs& vinput) : Assoc::Assoc(vinput) {}; //Run Assoc constructor
+	//-// Sol1 : Run constructors
+	Map(typename Map<T>::VecOfPairs& vinput) : Assoc<T>::Assoc(vinput) {}; //Run Assoc constructor
 	
+	//-// Sol2 : Inherit constructors
+	//using Assoc<T>::Assoc;
+
+	//Test
+	//-// vectorprint
 	void print_elemlast(){
 		
-		std::cout<<vec.back().first<<"    "<<vec.back().second<<std::endl;
+		std::cout<<Map<T>::vec.back().first<<"    "<<Map<T>::vec.back().second<<std::endl;
 	}
+	//-// templateparamprint
+	void print_testparam() {
+
+		std::cout<<Map<T>::mary<<std::endl;
+	}
+
+	//-// using inheritance
+        typename Map<T>::VecOfPairs lalal;
+
 };
 
-
-namespace stavros {
-
-	//* functions defined here *//
-
-} 
 
 int main() {
 
@@ -79,7 +94,8 @@ std::cout<<maptic["Delphine"]<<std::endl;
 
 //TEST ORIGINAL END
 
-//TEST1 - Sorting Matrices
+
+//TEST1 - std::string
 	
 	//-//Set-up
 	using VecOfPairs = std::vector<std::pair<std::string,int>>;
@@ -88,7 +104,7 @@ std::cout<<maptic["Delphine"]<<std::endl;
 	
 	//-//Calling point
 
-	Map   map1{vec_main};
+	Map<std::string>   map1{vec_main};
 
 	//-//Print results
 
