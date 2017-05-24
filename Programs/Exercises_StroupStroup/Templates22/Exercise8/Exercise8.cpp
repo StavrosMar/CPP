@@ -24,7 +24,7 @@ public:
 	
 	// Operators
 	const int& operator[](const S&) const;
-	int& operator[](const S&);
+	int operator[](const S&);
 
 	//Test stavros
 	int mary = 0;
@@ -33,7 +33,7 @@ public:
 
 //-// Assoc::operator[] declaration
 template<typename S>
-int& Assoc<S>::operator[](const S& s) {
+int Assoc<S>::operator[](const S& s) {
 	
 	// search for s; return a reference to its value if found;
 	// otherwise, make a new pair {s,0} and return a reference to its value
@@ -60,6 +60,7 @@ public:
 	//using Assoc<T>::Assoc;
 
 	//Test
+	
 	//-// vectorprint
 	void print_elemlast(){
 		
@@ -71,7 +72,7 @@ public:
 		std::cout<<Map<T>::mary<<std::endl;
 	}
 
-	//-// using inheritance
+	//-// using inheritance - keyword typename is necessary
         typename Map<T>::VecOfPairs lalal;
 
 };
@@ -109,8 +110,33 @@ std::cout<<maptic["Delphine"]<<std::endl;
 	//-//Print results
 
 	map1.print_elemlast();
+
+	//-//Find element
+	std::cout<<map1["Liza"]<<std::endl;
+	map1.print_elemlast();
+
 //TEST1 - END
 
+//TEST1 - char
+	
+	//-//Set-up
+	using VecOfPairs_char = std::vector<std::pair<const char[],int>>;
+	VecOfPairs_char vec_main_char{ {"Anna",3}, {"Liza", 10} };
+		
+	
+	//-//Calling point
+
+	Map<const char[100]>   map1_char{vec_main_char};
+
+	//-//Print results
+
+	map1_char.print_elemlast();
+
+	//-//Find element
+	std::cout<<map1_char["Liza"]<<std::endl;
+	map1_char.print_elemlast();
+
+//TEST1 - END
 	return 0;
 
 }
