@@ -81,8 +81,18 @@ public:
 
 };
 
-//TEST3 - int
+// No Default constr definition
+class NoDefCon {
 
+	int _data;
+
+public:
+	
+	NoDefCon(const int& data) : _data(data) {};
+
+};
+
+//TestFunction for different types
 template<typename T>
 void TestFunction(const std::pair<T,int>& pair1, const std::pair<T,int>& pair2, const T& keyfound, const T& keynotfound) {
 
@@ -104,8 +114,6 @@ void TestFunction(const std::pair<T,int>& pair1, const std::pair<T,int>& pair2, 
 	std::cout<<"Value cor to : "<<keynotfound<<"  Not Found   "<<std::endl;
 
 }
-
-//TEST3 - END
 
 
 int main() {
@@ -150,8 +158,6 @@ std::cout<<maptic["Delphine"]<<std::endl;
 
 ////TEST2 - char - END
 
-
-
 //TEST3 - int
 
 	TestFunction({1, 300},{2, 1000}, 2, 39);
@@ -159,6 +165,22 @@ std::cout<<maptic["Delphine"]<<std::endl;
 ////TEST3 - int - END
 
 
+//TEST4 - No Default Constructor defined
+
+	using VecOfPairs = std::vector<std::pair<NoDefCon,int>>;
+	
+	std::pair<NoDefCon,int> pair1_ndc{100,1};
+	
+	std::pair<NoDefCon,int> pair2_ndc{1000,1};
+	
+	VecOfPairs vec_main_ndc{ pair1_ndc, pair2_ndc };
+	
+	//-//Calling point
+
+	Map<NoDefCon>   map1{vec_main_ndc};
+
+//TEST4 - NoDefCon - END
+	
 	return 0;
 
 }
