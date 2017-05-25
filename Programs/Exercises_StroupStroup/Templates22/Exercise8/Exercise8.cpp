@@ -10,6 +10,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <cstring>
 
 // Assoc Definition
 template<typename S>
@@ -26,7 +27,7 @@ public:
 	const int& operator[](const S&) const;
 	int operator[](const S&);
 
-	//Test stavros
+	//Testing stavros
 	int mary = 0;
 
 };
@@ -55,16 +56,19 @@ public:
 
 	//-// Sol1 : Run constructors
 	Map(typename Map<T>::VecOfPairs& vinput) : Assoc<T>::Assoc(vinput) {}; //Run Assoc constructor
-	
 	//-// Sol2 : Inherit constructors
 	//using Assoc<T>::Assoc;
+	
+	//-//test
+	//Map(Map<const char* c_string>::) :	
+	
 
 	//Test
 	
 	//-// vectorprint
 	void print_elemlast(){
 		
-		std::cout<<Map<T>::vec.back().first<<"    "<<Map<T>::vec.back().second<<std::endl;
+		std::cout<<"print_elemlast::The Last Elem is : ("<<Map<T>::vec.back().first<<" ,    "<<Map<T>::vec.back().second<<")"<<std::endl;
 	}
 	//-// templateparamprint
 	void print_testparam() {
@@ -76,6 +80,32 @@ public:
         typename Map<T>::VecOfPairs lalal;
 
 };
+
+//TEST3 - int
+
+template<typename T>
+void TestFunction(const std::pair<T,int>& pair1, const std::pair<T,int>& pair2, const T& keyfound, const T& keynotfound) {
+
+	//-//Set-up
+	using VecOfPairs = std::vector<std::pair<T,int>>;
+	VecOfPairs vec_main_int{ pair1, pair2 };
+	
+	//-//Calling point
+
+	Map<T>   map1{vec_main_int};
+
+	//-//Print results
+
+	map1.print_elemlast();
+
+	//-//Find element - tests
+	std::cout<<"Value cor to : "<<keyfound<<"  ->   "<<map1[keyfound]<<std::endl;
+	
+	std::cout<<"Value cor to : "<<keynotfound<<"  Not Found   "<<std::endl;
+
+}
+
+//TEST3 - END
 
 
 int main() {
@@ -93,50 +123,42 @@ std::map<std::string,int> maptic{
 //-// It is printing the first result
 std::cout<<maptic["Delphine"]<<std::endl;
 
-//TEST ORIGINAL END
+////TEST ORIGINAL END
 
 
 //TEST1 - std::string
 	
 	//-//Set-up
-	using VecOfPairs = std::vector<std::pair<std::string,int>>;
-	VecOfPairs vec_main{ {"Anna",3}, {"Liza", 10} };
-		
-	
-	//-//Calling point
+	std::pair<std::string,int> pair1_str{"std::string - Anna",3};
+	std::pair<std::string,int> pair2_str{"std::string - Liza", 10};
 
-	Map<std::string>   map1{vec_main};
+	std::string notfound_str="std::string - non existent";	
+	TestFunction(pair1_str,pair2_str,pair1_str.first,notfound_str);
 
-	//-//Print results
+////TEST1 - END
 
-	map1.print_elemlast();
 
-	//-//Find element
-	std::cout<<map1["Liza"]<<std::endl;
-	map1.print_elemlast();
 
-//TEST1 - END
-
-//TEST1 - char
+//TEST2 - char - cstyle strings
 	
 	//-//Set-up
-	using VecOfPairs_char = std::vector<std::pair<const char[],int>>;
-	VecOfPairs_char vec_main_char{ {"Anna",3}, {"Liza", 10} };
+	std::pair<const char*,int> pair1{"char - Apollo",13};
+	std::pair<const char*,int> pair2{"char - Zeus", 10};
 		
-	
-	//-//Calling point
+	const char* notfound="char - non existent";	
+	TestFunction(pair1,pair2,pair1.first,notfound);
 
-	Map<const char[100]>   map1_char{vec_main_char};
+////TEST2 - char - END
 
-	//-//Print results
 
-	map1_char.print_elemlast();
 
-	//-//Find element
-	std::cout<<map1_char["Liza"]<<std::endl;
-	map1_char.print_elemlast();
+//TEST3 - int
 
-//TEST1 - END
+	TestFunction({1, 300},{2, 1000}, 2, 39);
+
+////TEST3 - int - END
+
+
 	return 0;
 
 }
