@@ -65,26 +65,10 @@ public:
 	
 	//Operators
 	
-	//-//Operator[] - Element Access/Addition
+	//-//Operator[] -OptimSol1 - Element Access/Addition
 	int operator[](const T& s);
 
 	//-//Opetator > - compare pair_1 with pair_2 for sorting
-
-	//Function Objects
-	//-// Function object for == operator
-	struct Com_pair_key {
-		
-		Com_pair_key(const T& s) : key(s) {};
-
-		constexpr bool operator()(const std::pair<T,int>& a) {
-		
-			return (a.first == key ? true : false);
-		};
-
-		private:
-
-			T key;
-	};
 
 	//Test
 	
@@ -104,17 +88,21 @@ public:
 
 };
 
-//-// Map::operator[] definition - faster way sol
+//-// Map::operator[] - OptimSol1 - faster way - find_if solution
 template<typename T>
 int Map<T>::operator[](const T& s) {
-	
-//	Map<T>::Com_pair_key(s);
 
+	// Search
+	/*
+	Find_if is being run (for find - operator == for pairs required to be defined)
+	lambda gets s value and compares to 1st elem of every pair
+	*/
 	auto iter_found = std::find_if(Map<T>::vec.begin(),Map<T>::vec.end(),
 					[s](const std::pair<T,int>& a) 
 					{ return (a.first == s ? true : false); } );
-		
-	if (iter_found != Map<T>::vec.end()) {
+	
+	// Return Element based on provided key - if found		
+	if (iter_found == Map<T>::vec.end()) {
 
 		Map<T>::vec.push_back({s, 0});
 		return Map<T>::vec.back().second;
@@ -190,7 +178,7 @@ std::cout<<maptic["Delphine"]<<std::endl;
 
 ////TEST1 - END
 
-/*
+
 
 //TEST2 - char - cstyle strings
 	
@@ -225,7 +213,7 @@ std::cout<<maptic["Delphine"]<<std::endl;
 	Map<NoDefCon>   map1{vec_main_ndc};
 
 //TEST4 - NoDefCon - END
-*/	
+	
 	return 0;
 
 }
