@@ -1,2 +1,7 @@
 1) Find alternative way for iterating overthe elements
-   a) Could run a find on vector iterators maybe?
+   a) Could run a find on vector iterators maybe : Done - implemented with find_if
+   b) Maybe implement a find algorithm (?) Maybe after implicitly sorting the Map?
+   c) Reimplement so that :
+   	*) Sorting at construction level
+	*) comparison / insertion at the correct position when [] is invoked
+	      * use search algo to find roughly where to put it.

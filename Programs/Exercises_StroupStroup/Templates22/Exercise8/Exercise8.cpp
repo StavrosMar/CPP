@@ -26,14 +26,25 @@ public:
 	VecOfPairs vec;
 
 	Assoc(VecOfPairs& inVec) : vec (inVec) {};	
-	
+	Assoc() {};
+
 	// Operators
+	
+	//-//Operator [] - Element Access
 	const int& operator[](const S&) const;
 	int operator[](const S&);
 
 	//Testing stavros
 	int mary = 0;
-
+	
+	//-//Operator ++ Add an element to the back
+/*	Assoc<S>& operator++(const std::pair<S,int>& pair_in) {
+		
+		vec.push_back(pair_in);
+		return *this;
+	
+	}
+*/
 };
 
 //-// Assoc::operator[] declaration - slow method
@@ -178,8 +189,6 @@ std::cout<<maptic["Delphine"]<<std::endl;
 
 ////TEST1 - END
 
-
-
 //TEST2 - char - cstyle strings
 	
 	//-//Set-up
@@ -213,7 +222,28 @@ std::cout<<maptic["Delphine"]<<std::endl;
 	Map<NoDefCon>   map1{vec_main_ndc};
 
 //TEST4 - NoDefCon - END
-	
-	return 0;
+
+
+
+//TEST5 - 19.2.1
+
+//-// count the occurrences of each word on input
+
+std::cout<< "### TEST 5 ####"<<"\n";
+
+Assoc<std::string> values;
+std::string buf;
+int i(0);
+while (std::cin>>buf) {
+	values[buf];
+	++i;
+}
+for (auto x : values.vec)
+std::cout << '{' << x.first << ',' << x.second << "}\n";
+
+// TEST5 - 19.2.1 - END
+
+
+return 0;
 
 }
