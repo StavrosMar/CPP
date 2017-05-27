@@ -1,8 +1,12 @@
 //Templates 23 - Exercise 8
 // Create a Map Class
 
-//<Details>
-
+/*
+Implement a simple Map class based on the Assoc class from §19.2.1.(Assoc).
+Make sure Map works correctly using both C-style strings(TEST2) and string(TEST1) s as keys.
+Make sure Map works correctly for types with and without default constructors(TEST4).
+Provide a way of iterating over the elements of a Map .
+*/
 
 
 #include <iostream>
@@ -32,7 +36,7 @@ public:
 
 };
 
-//-// Assoc::operator[] declaration
+//-// Assoc::operator[] declaration - slow method
 template<typename S>
 int Assoc<S>::operator[](const S& s) {
 	
@@ -59,9 +63,28 @@ public:
 	//-// Sol2 : Inherit constructors
 	//using Assoc<T>::Assoc;
 	
-	//-//test
-	//Map(Map<const char* c_string>::) :	
+	//Operators
 	
+	//-//Operator[] - Element Access/Addition
+	int operator[](const T& s);
+
+	//-//Opetator > - compare pair_1 with pair_2 for sorting
+
+	//Function Objects
+	//-// Function object for == operator
+	struct Com_pair_key {
+		
+		Com_pair_key(const T& s) : key(s) {};
+
+		constexpr bool operator()(const std::pair<T,int>& a) {
+		
+			return (a.first == key ? true : false);
+		};
+
+		private:
+
+			T key;
+	};
 
 	//Test
 	
@@ -80,6 +103,28 @@ public:
         typename Map<T>::VecOfPairs lalal;
 
 };
+
+//-// Map::operator[] definition - faster way sol
+template<typename T>
+int Map<T>::operator[](const T& s) {
+	
+//	Map<T>::Com_pair_key(s);
+
+	auto iter_found = std::find_if(Map<T>::vec.begin(),Map<T>::vec.end(),
+					[s](const std::pair<T,int>& a) 
+					{ return (a.first == s ? true : false); } );
+		
+	if (iter_found != Map<T>::vec.end()) {
+
+		Map<T>::vec.push_back({s, 0});
+		return Map<T>::vec.back().second;
+	
+	} else {
+		
+		return iter_found->second;
+		
+	};
+}
 
 // No Default constr definition
 class NoDefCon {
@@ -145,7 +190,7 @@ std::cout<<maptic["Delphine"]<<std::endl;
 
 ////TEST1 - END
 
-
+/*
 
 //TEST2 - char - cstyle strings
 	
@@ -180,7 +225,7 @@ std::cout<<maptic["Delphine"]<<std::endl;
 	Map<NoDefCon>   map1{vec_main_ndc};
 
 //TEST4 - NoDefCon - END
-	
+*/	
 	return 0;
 
 }
