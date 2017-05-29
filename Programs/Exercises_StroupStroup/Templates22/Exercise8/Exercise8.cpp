@@ -87,6 +87,7 @@ public:
 	void print_elemlast(){
 		
 		std::cout<<"print_elemlast::The Last Elem is : ("<<Map<T>::vec.back().first<<" ,    "<<Map<T>::vec.back().second<<")"<<std::endl;
+		
 	}
 	//-// templateparamprint
 	void print_testparam() {
@@ -106,25 +107,39 @@ template<typename T>
 int Map<T>::operator[](const T& s) {
 
 	// Search
-	/*
-	Find_if is being run (for find - operator == for pairs required to be defined)
-	lambda gets s value and compares to 1st elem of every pair
-	*/
+	
 	auto iter_found = std::find_if(Map<T>::vec.begin(),Map<T>::vec.end(),
 					[s](const std::pair<T,int>& a) 
 					{ return (a.first == s ? true : false); } );
+
+	auto a{Map<T>::vec.begin()};
+	auto b{Map<T>::vec.end()};
 	
+	auto aux_d{ ( (b-a) - ( (b-a) % 2)) /2 }; // calculate div
+	
+	std::cout<<"Iterator diff : "<<aux_d<<std::endl;
+//	auto m{-1};
+/*
+	if ( (*m).first > (*a).first ) {
+
+	
+	} else {
+
+		
+
+	}
+
 	// Return Element based on provided key - if found		
 	if (iter_found == Map<T>::vec.end()) {
 
-		Map<T>::vec.push_back({s, 0});
-		return Map<T>::vec.back().second;
+		Map<T>::vec.insert({iter_pos, 0});
+		return Map<T>::(*iter_pos).second;
 	
 	} else {
-		
+*/		
 		return iter_found->second;
 		
-	};
+//	};
 }
 
 // No Default constr definition
@@ -183,68 +198,28 @@ std::cout<<maptic["Delphine"]<<std::endl;
 //TEST1 - std::string
 	
 	//-//Set-up
-	std::pair<std::string,int> pair1_str{"std::string - Anna",3};
-	std::pair<std::string,int> pair2_str{"std::string - Liza", 10};
+	std::pair<std::string,int> pair1{"std::string - Anna",3};
+	std::pair<std::string,int> pair2{"std::string - Liza", 10};
+	std::pair<std::string,int> pair3{"std::string - Lola", 13};
+	std::pair<std::string,int> pair4{"std::string - Kiki", 15};
 
-	std::string notfound_str="std::string - non existent";	
-	TestFunction(pair1_str,pair2_str,pair1_str.first,notfound_str);
-
-////TEST1 - END
-
-//TEST2 - char - cstyle strings
 	
-	//-//Set-up
-	std::pair<const char*,int> pair1{"char - Apollo",13};
-	std::pair<const char*,int> pair2{"char - Zeus", 10};
-		
-	const char* notfound="char - non existent";	
-	TestFunction(pair1,pair2,pair1.first,notfound);
-
-////TEST2 - char - END
-
-//TEST3 - int
-
-	TestFunction({1, 300},{2, 1000}, 2, 39);
-
-////TEST3 - int - END
-
-
-//TEST4 - No Default Constructor defined
-
-	using VecOfPairs = std::vector<std::pair<NoDefCon,int>>;
+	using VecOfPairs = std::vector<std::pair<std::string,int>>;
 	
-	std::pair<NoDefCon,int> pair1_ndc{100,1};
-	
-	std::pair<NoDefCon,int> pair2_ndc{1000,1};
-	
-	VecOfPairs vec_main_ndc{ pair1_ndc, pair2_ndc };
+	VecOfPairs vec_test{ pair2 ,pair1};
 	
 	//-//Calling point
 
-	Map<NoDefCon>   map1{vec_main_ndc};
+	Map<std::string>   map1{vec_test};
+
+	map1["std::string - Kiki"];
 
 //TEST4 - NoDefCon - END
 
 
-
-//TEST5 - 19.2.1
-
-//-// count the occurrences of each word on input
-
-std::cout<< "### TEST 5 ####"<<"\n";
-
-Assoc<std::string> values;
-std::string buf;
-int i(0);
-while (std::cin>>buf) {
-	values[buf];
-	++i;
-}
-for (auto x : values.vec)
-std::cout << '{' << x.first << ',' << x.second << "}\n";
-
-// TEST5 - 19.2.1 - END
-
+std::vector<int> vecint{1,2,3,4};
+//vecint.push_back(4);
+std::cout<<"Capacity = :  "<<vecint.capacity()<<"\n"<<*(vecint.end()-1)<<std::endl;
 
 return 0;
 
