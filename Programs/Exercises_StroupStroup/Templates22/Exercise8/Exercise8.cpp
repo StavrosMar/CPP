@@ -99,8 +99,6 @@ public:
 
 };
 
-//-// Map::operator[] - OptimSol2 - custom
-
 //-// Map::operator[] - OptimSol1 - faster way - find_if solution
 template<typename T>
 int Map<T>::operator[](const T& s) {
