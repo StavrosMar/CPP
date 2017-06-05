@@ -19,7 +19,7 @@ namespace stavros {
 
 template<class A_ptr, class B>    //Note the class vs typename identifier
 A_ptr ptr_cast(B* p) {
-	
+
 	auto result{dynamic_cast<A_ptr>(p)};
 	
 	if (result != NULL) {
@@ -28,7 +28,7 @@ A_ptr ptr_cast(B* p) {
 	
 	} else {
 
-		std::cout<<"dynamic_cast returned null_ptr"<<std::endl;
+		std::cout<<"Dynamic_cast returned null_ptr"<<std::endl;
 		const std::bad_cast e;
 		std::cout<<e.what()<<std::endl;
 		throw e;
@@ -40,19 +40,19 @@ A_ptr ptr_cast(B* p) {
 class A
 {
 public:
- virtual  ~A () { std::cout<<"~Calling A destructor"<<std::endl; } // Mandatory virtual destructor for base class
+ virtual  ~A() { std::cout<<"~Calling A destructor"<<std::endl; } // Mandatory virtual destructor for base class
 };
 
 class B : public A
 {
 public:
- ~B () { std::cout<<"~Calling B destructor"<<std::endl; }
+~B () { std::cout<<"~Calling B destructor"<<std::endl; }
 };
 
 class D : public A
 {
 public:
- ~D () { std::cout<<"~Calling D destructor"<<std::endl; }
+~D () { std::cout<<"~Calling D destructor"<<std::endl; }
 };
 
 class C {};
@@ -63,7 +63,7 @@ class C {};
 template<typename CastTo, typename typePtr>
 void testCast(int test_id, typePtr ptr) {
 	
-	std::cout<<"Test "<<test_id<<std::endl;
+	std::cout<<"### Test : "<<test_id<<" ###"<<std::endl;
 
 	 try
 	 {
@@ -88,10 +88,11 @@ int main() {
 //TEST 1
 //-//A not inheriting from C - should give null.
 
-A* a;
+A* a = new A;  
 
 testCast<C*>(1,a);
 
+delete a;
 //TEST1 - END
 
 //TEST2
@@ -105,20 +106,22 @@ testCast<B*>(2,a2);
 
 //TEST3
 //-//a3 is pointing to A - casting to B is invalid
-A* a3 = new A;
+A a_val;
+A* a3 = &a_val;
 
 testCast<B*>(3,a3);
-delete a3;
 //TEST3 - END
+
 
 //TEST4
 //-//a4 is pointing to D (inherits from A) - should give invalid
-D d4;
-A* a4 = &d4;
+A* a4 = new D;
 
-//testCast<D*>(4,a4);
+testCast<B*>(4,a4);
 
-//TEST3 - END
+delete a4;
+
+//TEST4 - END
 return 0;
 
 }
