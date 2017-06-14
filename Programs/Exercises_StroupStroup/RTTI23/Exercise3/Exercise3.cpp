@@ -14,24 +14,30 @@ namespace stavros {
 
 //dcast
 
-template <typename T>
-T*  dcast(void* arg) {
-
+template <typename T,typename R>
+T*  dcast(R* arg) {
 	
+	T t;
 
-/*	
-	try {	
-		T* t = arg;
-		std::cout<<"\n## cast success ##\n";
+	std::cout<<"Argument is of type   :"<<typeid(*arg).name()<<std::endl;
+	std::cout<<"Casting to type       :"<<typeid(t).name()<<std::endl;
+	
+	if( typeid(*arg).name() == typeid(t).name() ) {
+	
+		std::cout<<"\n## cast success ##\n";;
+		
+	//	*t = *arg;
+		return &t;
+	
+	} else {
+
+		const std::bad_cast e;
+		
+		std::cout<<"\n## cast failed ##\n";
+		std::cout<<e.what()<<std::endl;
+		
 	}
-	catch (std::bad_cast)
-	{
-		std::cout<<"\n!! cast failed ##\n";
-	}
-
-	return t;
-*/
-
+	
 } 
 
 }
@@ -63,16 +69,19 @@ std::cin>>i_sel;
 
 if (i_sel==1) {
 
-ptr = &m;
+	ptr = &a;
 	
 }
 
 
-std::cout<<"Interface the same  ? : "<<(typeid(*ptr).name()==typeid(a).name())<<std::endl; 
-std::cout<<"ptr is of type : "<<typeid(*ptr).name()<<std::endl; 
+//std::cout<<"Interface the same  ? : "<<(typeid(*ptr).name()==typeid(a).name())<<std::endl; 
+//std::cout<<"ptr is of type : "<<typeid(*ptr).name()<<std::endl; 
 
-//	stavros::dcast<A>(ptr);
-	
+stavros::dcast<A>(ptr);
+
+auto* ptr_test = dynamic_cast<A*>(ptr);
+std::cout<<typeid(ptr_test).name()<<std::endl;
+
 //TEST1 - Sorting Matrices
 
 	//-//Print results
