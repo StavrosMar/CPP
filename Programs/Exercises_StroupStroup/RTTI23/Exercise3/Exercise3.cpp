@@ -15,7 +15,7 @@ namespace stavros {
 //dcast
 
 template <typename T,typename R>
-T*  dcast(R* arg) {
+void*  dcast(R* arg) {
 	
 	T t;
 
@@ -27,7 +27,7 @@ T*  dcast(R* arg) {
 		std::cout<<"\n## cast success ##\n";;
 		
 	//	*t = *arg;
-		return &t;
+		return arg;
 	
 	} else {
 
@@ -69,7 +69,7 @@ std::cin>>i_sel;
 
 if (i_sel==1) {
 
-	ptr = &a;
+	ptr = &m;
 	
 }
 
@@ -77,10 +77,10 @@ if (i_sel==1) {
 //std::cout<<"Interface the same  ? : "<<(typeid(*ptr).name()==typeid(a).name())<<std::endl; 
 //std::cout<<"ptr is of type : "<<typeid(*ptr).name()<<std::endl; 
 
-stavros::dcast<A>(ptr);
+auto* PointerStavros = stavros::dcast<A>(ptr);
 
-auto* ptr_test = dynamic_cast<A*>(ptr);
-std::cout<<typeid(ptr_test).name()<<std::endl;
+//auto* ptr_test = dynamic_cast<A*>(ptr);
+//std::cout<<typeid(ptr_test).name()<<std::endl;
 
 //TEST1 - Sorting Matrices
 
