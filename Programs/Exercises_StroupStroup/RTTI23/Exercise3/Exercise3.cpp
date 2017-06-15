@@ -15,7 +15,7 @@ namespace stavros {
 //dcast
 
 template <typename T,typename R>
-void*  dcast(R* arg) {
+T*  dcast(R* arg) {
 	
 	T t;
 
@@ -26,8 +26,8 @@ void*  dcast(R* arg) {
 	
 		std::cout<<"\n## cast success ##\n";;
 		
-	//	*t = *arg;
-		return arg;
+		try { T* casted = arg ; return arg; };
+
 	
 	} else {
 
@@ -77,7 +77,7 @@ if (i_sel==1) {
 //std::cout<<"Interface the same  ? : "<<(typeid(*ptr).name()==typeid(a).name())<<std::endl; 
 //std::cout<<"ptr is of type : "<<typeid(*ptr).name()<<std::endl; 
 
-auto* PointerStavros = stavros::dcast<A>(ptr);
+A* PointerStavros = stavros::dcast<A>(ptr);
 
 //auto* ptr_test = dynamic_cast<A*>(ptr);
 //std::cout<<typeid(ptr_test).name()<<std::endl;
