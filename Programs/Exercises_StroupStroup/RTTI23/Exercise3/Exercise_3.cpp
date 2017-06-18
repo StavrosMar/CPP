@@ -14,39 +14,29 @@ namespace stavros {
 
 //dcast
 
-template <typename T,typename R>
-T*  dcast(R* arg) {
-	
-	T t;
+template <typename T>
+T* dcast(void* ptr) { //ptr is the pointer to the object
 
-	std::cout<<"Argument is of type   :"<<typeid(*arg).name()<<std::endl;
-	std::cout<<"Casting to type       :"<<typeid(t).name()<<std::endl;
+	size_t* vfptr = reinterpret_cast<size_t*>(ptr);
 	
-	if( typeid(*arg).name() == typeid(t).name() ) {
-	
-		std::cout<<"\n## cast success ##\n";;
-		
-		try { T* casted = arg ; return arg; };
-
-	
-	} else {
-
-		const std::bad_cast e;
-		
-		std::cout<<"\n## cast failed ##\n";
-		std::cout<<e.what()<<std::endl;
-		
-	}
-	
-} 
 
 }
 
-class Interface {public: virtual ~Interface() {}; };
+}
 
-class M : public Interface {};
+class Interface {public: virtual ~Interface() {}; virtual void print_name() { std::cout<<"Interface"<<std::endl;} };
 
-class A : public M {};
+class M : public Interface {
+
+	void print_name() { std::cout<<"M class"<<std::endl;} ;
+
+};
+
+class A : public M {
+
+	void print_name() { std::cout<<"A class"<<std::endl;} ;
+
+};
 
 class B : public Interface {};
 
@@ -63,9 +53,7 @@ Interface* ptr;
 
 //-//Calling point
 
-
 std::cin>>i_sel;
-
 
 if (i_sel==1) {
 
@@ -73,19 +61,29 @@ if (i_sel==1) {
 	
 }
 
-
-//std::cout<<"Interface the same  ? : "<<(typeid(*ptr).name()==typeid(a).name())<<std::endl; 
-//std::cout<<"ptr is of type : "<<typeid(*ptr).name()<<std::endl; 
+//TEST0 - confirming functionality
 
 A* PointerStavros = stavros::dcast<A>(ptr);
+auto* ptr_test = dynamic_cast<A*>(ptr);
+std::cout<<typeid(ptr_test).name()<<std::endl;
 
-//auto* ptr_test = dynamic_cast<A*>(ptr);
-//std::cout<<typeid(ptr_test).name()<<std::endl;
+//TEST0 - END
 
-//TEST1 - Sorting Matrices
+//TEST1 - 
 
-	//-//Print results
-	
+std::cout<<"######TEST 1 - Starting ######"<<std::endl;
+
+Interface* ptr_test2 = &a;
+//size_t* vfptr = *(reinterpret_cast<size_t**>(ptr_test2));
+
+size_t* vfptr=(size_t *)&ptr_test2;
+vfptr=(size_t *)*vfptr;
+
+((void (*)()) *vfptr )();
+
+vfptr++;
+
+((void (*)()) *vfptr )();
 //TEST1 - END
 
 	return 0;
