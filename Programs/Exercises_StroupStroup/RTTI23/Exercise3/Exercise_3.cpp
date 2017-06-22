@@ -17,7 +17,7 @@ namespace stavros {
 template <typename T>
 T* dcast(void* ptr) { //ptr is the pointer to the object
 
-	size_t* vfptr = reinterpret_cast<size_t*>(ptr);
+	size_t* vfptr = reinterpret_cast<size_t**>(ptr);
 	
 
 }
@@ -63,7 +63,7 @@ if (i_sel==1) {
 
 //TEST0 - confirming functionality
 
-A* PointerStavros = stavros::dcast<A>(ptr);
+//A* PointerStavros = stavros::dcast<A>(ptr);
 auto* ptr_test = dynamic_cast<A*>(ptr);
 std::cout<<typeid(ptr_test).name()<<std::endl;
 
@@ -74,10 +74,14 @@ std::cout<<typeid(ptr_test).name()<<std::endl;
 std::cout<<"######TEST 1 - Starting ######"<<std::endl;
 
 Interface* ptr_test2 = &a;
-//size_t* vfptr = *(reinterpret_cast<size_t**>(ptr_test2));
 
-size_t* vfptr=(size_t *)&ptr_test2;
-vfptr=(size_t *)*vfptr;
+using Type = size_t;
+
+//First cast
+Type* vfptr = *(reinterpret_cast<Type**>(ptr_test2));
+//Second cast
+//Type* vfptr=(Type *)&ptr_test2;
+vfptr=(Type *)&*vfptr;
 
 ((void (*)()) *vfptr )();
 
@@ -87,5 +91,4 @@ vfptr++;
 //TEST1 - END
 
 	return 0;
-
 }
