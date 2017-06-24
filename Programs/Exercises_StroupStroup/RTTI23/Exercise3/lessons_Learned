@@ -1,4 +1,5 @@
-1) https://bytes.com/topic/c/answers/942922-virtual-pointer-accessing-vtable-class-inside-program
+1) *virtual_table_access.cpp taken from (
+https://bytes.com/topic/c/answers/942922-virtual-pointer-accessing-vtable-class-inside-program)
 
    As per example - if you want to access the actual function of the underlying object you need
    to //move 2 bytes ahead for 32 bit. For 64 bit you need to move another 2.
