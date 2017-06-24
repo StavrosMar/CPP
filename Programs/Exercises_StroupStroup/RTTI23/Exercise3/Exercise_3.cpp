@@ -78,16 +78,18 @@ Interface* ptr_test2 = &a;
 using Type = size_t;
 
 //First cast
-Type* vfptr = *(reinterpret_cast<Type**>(ptr_test2));
+Type* vptr = (Type*)ptr_test2;
+vptr = (Type*)*vptr;
+
+vptr++; //Move 2 bytes ahead
+vptr++; //Move another 2 bytes ahead as needed for x64 architecture
+//void (*vptr)() = vfptr+1;
+((void (*) () ) *vptr)();
+
 //Second cast
 //Type* vfptr=(Type *)&ptr_test2;
-vfptr=(Type *)&*vfptr;
 
-((void (*)()) *vfptr )();
 
-vfptr++;
-
-((void (*)()) *vfptr )();
 //TEST1 - END
 
 	return 0;
