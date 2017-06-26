@@ -83,16 +83,22 @@ std::cout<<"######TEST 1 - Starting ######"<<std::endl;
 
 Interface* ptr_test2 = &a;
 
-using Type = size_t;
+using Type = long;  //64 bit
+//using Type = size_t;//64 bit equivalent
 
-//First cast
+//First Casting way
+Type **vptr = (Type **)ptr_test2;
+//Move 2 positions ahead
+((void (*) () ) vptr[0][2])();
+
+//Second Casting way
 Type* vptr = (Type*)ptr_test2;
 vptr = (Type*)*vptr;
-
-//vptr++; //Move 2 bytes ahead
-//vptr++; //Move another 2 bytes ahead as needed for x64 architecture
+//-//vptr++; //Move 2 bytes ahead
+//-//vptr++; //Move another 2 bytes ahead as needed for x64 architecture (?)
 vptr = vptr+2;
-//void (*vptr)() = vfptr+1;
+
+//Execute virtual functions
 ((void (*) () ) *vptr)();
 
 vptr=vptr+1;;
@@ -106,6 +112,6 @@ vptr=vptr+1;;
 
 
 //TEST1 - END
-
+*/
 	return 0;
 }
