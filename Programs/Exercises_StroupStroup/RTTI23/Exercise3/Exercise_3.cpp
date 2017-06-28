@@ -54,7 +54,7 @@ int main() {
 
 int i_sel(0);
 
-A a;
+A a,a2;
 M m;
 B b;
 Interface* ptr;
@@ -81,19 +81,30 @@ std::cout<<typeid(ptr_test).name()<<std::endl;
 
 std::cout<<"######TEST 1 - Starting ######"<<std::endl;
 
+//Define pointers
 Interface* ptr_test2 = &a;
+A* ptr_a = &a;
+A* ptr_a2 = &a2;
 
 using Type = long;  //64 bit
 //using Type = size_t;//64 bit equivalent
 
-//First Casting way
-Type **vptr = (Type **)ptr_test2;
+////First Casting way
+//Type **vptr = (Type **)ptr_test2;
 //Move 2 positions ahead
-((void (*) () ) vptr[0][2])();
+//((void (*) () ) vptr[0][2])();
 
-//Second Casting way
+////Second Casting way
 Type* vptr = (Type*)ptr_test2;
 vptr = (Type*)*vptr;
+
+//Third Casting Way - Testing
+//A* vptr = (A*)(ptr_test2);
+
+//if ( vptr == ptr_test2 ) std::cout<<"vptr and ptr_a are the same"<<'\n';
+//print ptr type
+std::cout<<"Pointer Type Interface: "<<typeid(*vptr).name()<<std::endl;
+
 //-//vptr++; //Move 2 bytes ahead
 //-//vptr++; //Move another 2 bytes ahead as needed for x64 architecture (?)
 vptr = vptr+2;
@@ -112,6 +123,6 @@ vptr=vptr+1;;
 
 
 //TEST1 - END
-*/
+
 	return 0;
 }
