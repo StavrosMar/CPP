@@ -17,8 +17,11 @@ namespace stavros {
 template <typename T>
 T* dcast(void* ptr) { //ptr is the pointer to the object
 
-	size_t* vfptr = reinterpret_cast<size_t**>(ptr);
+	//First casting way
+	int* vfptr = *reinterpret_cast<int**>(ptr);
 	
+	//Second casting way
+	//size_t* vfptr = (size_
 
 }
 
@@ -86,7 +89,7 @@ Interface* ptr_test2 = &a;
 A* ptr_a = &a;
 A* ptr_a2 = &a2;
 
-using Type = long;  //64 bit
+using Type = size_t;  //64 bit
 //using Type = size_t;//64 bit equivalent
 
 ////First Casting way
@@ -95,7 +98,9 @@ using Type = long;  //64 bit
 //((void (*) () ) vptr[0][2])();
 
 ////Second Casting way
-Type* vptr = (Type*)ptr_test2;
+//Or could do
+  //Type* vptr = reinterpret_cast<Type*>(ptr_test2);
+Type* vptr = (Type*)(ptr_test2);
 vptr = (Type*)*vptr;
 
 //Third Casting Way - Testing
@@ -115,6 +120,10 @@ vptr = vptr+2;
 vptr=vptr+1;;
 ((void (*) () ) *vptr)();
 
+vptr=vptr+1;;
+((void (*) () ) *vptr)();
+
+//Expected segmentation fault here
 vptr=vptr+1;;
 ((void (*) () ) *vptr)();
 
