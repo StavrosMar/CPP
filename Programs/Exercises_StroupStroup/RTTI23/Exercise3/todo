@@ -1,2 +1,5 @@
 1) Study typeid and relevant conversions
 2) implement dynamic_cast with typeid
+
+//Issue :
+  1) Find the length of the virtual table in order to loop through
