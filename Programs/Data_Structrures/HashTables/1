@@ -11,68 +11,30 @@ Our friend Monk has been made teacher for the day today by his school professors
 #include <sstream>
 #include <math.h>
 
-
-namespace stavros {
-
-template<typename T> class HashTable {
-
-public:
-
-	// Constructor
-	HashTable(const int& N) : m_N(N) {} 
-
-
-	//Operators
-
-		//Add Element
-	T insert(const int& rollnum, const T& name) {
-
-		return name;
-
-	}
-		
-		//Access Element
-	T operator[](const int& rollnum) {
-
-		return "strin";
-
-	}
-
-private:
+// Hash function declaration
+unsigned int hash(unsigned int x, int N ) {
+    x = ((x >> 16) ^ x) * 0x45d9f3b;
+    x = ((x >> 16) ^ x) * 0x45d9f3b;
+    x = (x >> 16) ^ x;
 	
-	int m_N;
-
-	// Hash function declaration
-	unsigned int hash(unsigned int x, int N ) {
-	    x = ((x >> 16) ^ x) * 0x45d9f3b;
-	    x = ((x >> 16) ^ x) * 0x45d9f3b;
-	    x = (x >> 16) ^ x;
-		
-		// Divide by the Database table length to get index
-		int index( x % N);
-	    return index;
-	}
-
-	//
-};
-
+	// Divide by the Database table length to get index
+	int index( x % N);
+    return index;
 }
+
+
 
 int main() {
 
 //Input 
 
-int 		N{100}; //Student number
 std::string i_name{"  "};
 int         i_roll{0};
 
 std::string input;
 std::stringstream ss;
 
-
-stavros::HashTable<std::string> store(N);
-
-//User input - ends if a name ends in ~
+	//Input ends if a name ends in ~
 while ( getline (std::cin,input) && i_name.find("~") > i_name.length()-1 ) {
 
 	ss.clear();
@@ -80,13 +42,19 @@ while ( getline (std::cin,input) && i_name.find("~") > i_name.length()-1 ) {
 	ss << input;
     
 	//extract i_roll and i_name from the input
-	ss >> i_roll >> i_name;
-
-	//Add records to the structure
-	store.insert(i_roll,i_name);
+	ss >> i_roll >> i_name;   	
+	//debugging cin
+	//std::cout<< "**Confirmation : " << i_roll << "<space>" <<  i_name << "\n";
 
 }
 
+//Tests passed - we have truncated random numbers woohoo!
+std::cout << "Testing hash function : " << hash(3.2000225*pow(10,18)) << "\n" ;
+
+std::cout << "output of DB_SIZE" << int(DB_SIZE) << "\n";
+// * build hash table now
+
+// * build hash table here
 
 return 0;
 
