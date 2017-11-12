@@ -6,18 +6,20 @@ Our friend Monk has been made teacher for the day today by his school professors
 
 */
 
+#define DB_SIZE 131071.00; 
+
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <math.h>
 
 // Hash function declaration
-unsigned int hash(const unsigned int x) {
+unsigned int hash(unsigned int x) {
     x = ((x >> 16) ^ x) * 0x45d9f3b;
     x = ((x >> 16) ^ x) * 0x45d9f3b;
     x = (x >> 16) ^ x;
-	// Truncate so that maximum is 10^5 (or 99999 to be precise)
-	x = x & (unsigned int)(99999);
+	// Truncate so that maximum index is as close to  10^5 (as possible)
+	x = x & (unsigned int)(131071);
     return x;
 }
 
@@ -48,8 +50,9 @@ while ( getline (std::cin,input) && i_name.find("~") > i_name.length()-1 ) {
 }
 
 //Tests passed - we have truncated random numbers woohoo!
-std::cout << "Testing hash function : " << hash(9.2000021*pow(10,8)) << "\n" ;
+std::cout << "Testing hash function : " << hash(9.2000025*pow(10,8)) << "\n" ;
 
+std::cout << "output of DB_SIZE" << int(DB_SIZE) << "\n";
 // * build hash table now
 
 // * build hash table here
