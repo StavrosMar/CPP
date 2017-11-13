@@ -26,6 +26,9 @@ public:
 
 		//Add Element
 	T insert(const int& rollnum, const T& name) {
+		
+		int index{hash(rollnum)};
+		
 
 		return name;
 
@@ -33,17 +36,20 @@ public:
 		
 		//Access Element
 	T operator[](const int& rollnum) {
-
-		return "strin";
+		
+		return ;
 
 	}
 
 private:
 	
-	int m_N;
+	// Member declaration
+	int m_N;    // Size of Structure
+	int    Roll[m_N] = {0};  // Array with the Roll numbers
+	string Onoma[m_N] = {0}; // Array with the Student names
 
 	// Hash function declaration
-	unsigned int hash(unsigned int x, int N ) {
+	unsigned int hash(unsigned int x, const int& N ) {
 	    x = ((x >> 16) ^ x) * 0x45d9f3b;
 	    x = ((x >> 16) ^ x) * 0x45d9f3b;
 	    x = (x >> 16) ^ x;
