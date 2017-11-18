@@ -16,50 +16,121 @@ namespace stavros {
 
 template<typename T> class HashTable {
 
-public:
-
-	// Constructor
-	HashTable(const int& N) : m_N(N) {} 
-
-
-	//Operators
-
-		//Add Element
-	T insert(const int& rollnum, const T& name) {
-		
-		int index{hash(rollnum)};
-		
-
-		return name;
-
-	}
-		
-		//Access Element
-	T operator[](const int& rollnum) {
-		
-		return ;
-
-	}
-
 private:
 	
 	// Member declaration
-	int m_N;    // Size of Structure
-	int    Roll[m_N] = {0};  // Array with the Roll numbers
-	string Onoma[m_N] = {0}; // Array with the Student names
+	int    m_N;    // Size of Structure
+	int*    Roll;  // Array with the Roll numbers
+	std::string* Onoma; // Array with the Student names
 
 	// Hash function declaration
-	unsigned int hash(unsigned int x, const int& N ) {
-	    x = ((x >> 16) ^ x) * 0x45d9f3b;
+	unsigned int hash(const unsigned int& num) {
+	    
+		unsigned int x{num};
+		
+		x = ((x >> 16) ^ x) * 0x45d9f3b;
 	    x = ((x >> 16) ^ x) * 0x45d9f3b;
 	    x = (x >> 16) ^ x;
-		
-		// Divide by the Database table length to get index
-		int index( x % N);
-	    return index;
+
+		return x;
 	}
 
-	//
+
+public:
+
+	// Constructor
+	HashTable() : m_N(100), Roll{new int[100]}, Onoma{new std::string[100]} {};
+	HashTable(const int& N) : m_N(N), Roll{new int[N]}, Onoma{new std::string[N]} {}; 
+
+	// Copy Constructor
+	HashTable(const HashTable& hashTable) {
+
+		m_N = hashTable.m_N ;
+		Roll = new int[m_N];
+		Onoma = new std::string[m_N];
+		
+		memmove(hashTable.Roll,Roll,sizeof(int)*m_N);
+		memmove(hashTable.Onoma,Onoma,sizeof(std::string)*m_N);
+	}
+
+	//Move Constructor
+	HashTable(HashTable&& hashTable) {
+
+		m_N = std::move(hashTable.m_N);
+		Roll = hashTable.Roll;
+		Onoma = hashTable.Onoma;
+
+	}
+
+	// Destructor
+	~HashTable() {
+		
+		delete[] Roll;
+		delete[] Onoma;
+	}
+
+	//Operators
+
+	//Insert Element
+	int insert(const int& rollnum, const T& name) {
+		
+		// Run hash
+		const unsigned int h{hash(rollnum)};
+		
+		// Divide by the Database table length to get index
+		int index = h % m_N;
+
+			
+		int count{1};
+		while ( Roll[index] != 0 && index < m_N) {
+
+			//Implement quadratic probing.
+			index = (h+int(pow(count,2))) % m_N;
+		
+		}				
+		
+		if (index < m_N) {
+		
+			Roll[index] = rollnum;
+			Onoma[index] = name;
+			return 0;
+
+		} else {
+
+			return -11;
+		}
+		
+	}
+		
+		//Access Element
+	 std::string operator[](const int& rollnum) {
+
+		//Run hash
+		const unsigned int h{hash(rollnum)};
+
+		// Divide by the Database table length to get the index
+		int index = { h % m_N };
+
+		int count{1};
+		while (Roll[index] != rollnum && index < m_N) {
+		
+			//IMplement quadratic probing
+			index = (h+int(pow(count,2))) % m_N;
+
+		}
+
+		if (index < m_N) {
+
+			return Onoma[index];
+		
+		} else {
+
+			return std::string("Not found");
+
+		}
+
+	}
+
 };
 
 }
