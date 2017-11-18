@@ -1,0 +1,3 @@
+C++ requires arrays to be declared in compile time. Because my tables here depend on N (parameter) which could be Fed by the user, I assigned them to the heap via new operator. Because of the that I had to declare Copy,Move Constructors and a Destructor.
+
+Another to pass the size (if it was not dependent by the user) would be as a template parameter.
