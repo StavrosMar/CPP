@@ -22,11 +22,14 @@ class My_info {
 			return _description;
 		}
 
+		//Correspondence with class member functions
+		//...
+		/////
+
 
 	private:
 
 		std::string _description{""};
-
 
 };
 
@@ -43,7 +46,14 @@ E e;
 My_info info_D("Information about D function");
 My_info info_E("Information about E function");
 
-myMap[std::type_index(typeid(D))] = info_D;
+//Build mapping
+//typeid is run statically as the type is known
+myMap[std::type_index(typeid(D))] = &info_D;
+myMap[std::type_index(typeid(E))] = &info_E;
+
+//Test
+Base* b = &d;
+std::cout<<myMap[typeid(*b)]->getDesc()<<"\n";
 
 	return 0;
 
