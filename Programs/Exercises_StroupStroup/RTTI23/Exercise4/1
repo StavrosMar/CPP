@@ -27,6 +27,7 @@ class My_info {
 
 		std::string _description{""};
 
+
 };
 
 int main() {
@@ -42,14 +43,7 @@ E e;
 My_info info_D("Information about D function");
 My_info info_E("Information about E function");
 
-//Build mapping
-//typeid is run statically as the type is known
-myMap[std::type_index(typeid(D))] = &info_D;
-myMap[std::type_index(typeid(E))] = &info_E;
-
-//Test
-Base* b = &d;
-std::cout<<myMap[typeid(*b)]->getDesc()<<"\n";
+myMap[std::type_index(typeid(D))] = info_D;
 
 	return 0;
 
