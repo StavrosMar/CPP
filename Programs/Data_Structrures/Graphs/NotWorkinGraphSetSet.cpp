@@ -1,48 +1,72 @@
-// Example program
+
 #include <iostream>
 #include <string>
 #include <set>
+#include <map>
+#include <utility>
+#include <initializer_list>
 
 using namespace std;
 
-template<class T> class DerivSet  {
+// My graph Structure
+template < class T > class Graph {
 
-public:
+private:
+    // Choosing map and set because of tree search efficiency 
+    map<int,set<int>> m_map;
 
-    T m_x;
-    std::set<T> m_set;
+public: 
 
-    DerivSet(const T& xi, const set<T>& seti) : m_x{xi}, m_set{seti} {} ;
-    DerivSet(const T& xi) : m_x{xi} {} ;
-    
-    /*
-    constexpr bool operator==(const DerivSet& a) const {
+    // Construct from initialiser_list
+    Graph(const std::initializer_list<pair<T,T>>& init) { 
         
-        return { (m_x == a.m_x) && (m_set == a.m_set) };
+        for (auto p : init) {
+            
+            this->insert(p.first,p.second);
+        }
     }
-    */
-    
-    // Important - add const in the end otherwise - issue with qualifiers when loaded to insert for set - const correctness
-    constexpr bool operator<(const DerivSet& a) const {
-        return { (m_x < a.m_x) };
+
+    void insert(const T& x, const T& y) {
+     
+          m_map[x].insert(y);
+          m_map[y].insert(x);
+        
     }
     
-    DerivSet insert(const T& yi)  {
-        m_set.insert(yi);
-        return *this;
-    }
+    bool exists(const T& x,const T& y) const {
     
+        int flag(0);
+        
+        auto it1 = m_map.find(x);
+        auto it2 = m_map.find(y);
+    
+        if ( it1 != m_map.end() ) {
+        
+            if ( it1->second.find(y) != it1->second.end() ) {
+            
+                flag = 1;
+            }
+    
+        } else if ( it2 != m_map.end() ) {
+        
+            if ( it2->second.find(x) != it2->second.end() ) {
+            
+                flag = 1;
+            }
+        }
+        
+        return flag;
+    }
+
 };
 
 
+//Driver Code
 int main() {
 
 int N, M, x, y, Q;
 
-// Choosing set because of binary search tree efficiency 
-set<DerivSet<int>> graph;
-
-auto graphEnd{graph.end()};
+Graph<int> graph= { make_pair(1,2), make_pair(3,4) };
 
 cin >> N >> M ;
 
@@ -51,52 +75,23 @@ for (int i{0}; i < M; i++) {
     cout << "Enter nodes" << "\n" ;
     cin >> x >> y ;
     
-    // Returns constant iterator - argggg - cannot manipulate from the outside
-    auto it{(graph.find(DerivSet<int>(x)))};
+    graph.insert(x,y);
     
-    if ( it != graph.end() ) {
-        graph.insert(DerivSet<int>{x}.insert(y));
-    } else {
-        
-    }
-
-    
-    
-   // auto subSetIter = graph.find(*insertedPair.first);
-    
-  //  subSetIter->insert(y);
-    
-    //insert(y);
-    
-    //.insert(y)
-    //graph.insert(std::set<int>(y).insert(x));
 }
-/*
-auto graphend(graph.end().end());
+
+cout << "Give me Q queries" << "\n";
+cin >> Q ; cin.ignore() ;
+
+map<int,string> yesno{ make_pair(1,"YES"), make_pair(0,"NO")};
 
 
-cin >> Q ;
+for (int i{0} ; i < Q; i++) {
 
-for (int i{0}: i < Q; i++) {
-
+    cout <<"Give nodes" << "\n";
     cin >> x >> y ;
     
-    auto r1{graph.find(x).find(y)};
-    auto r2{graph.find(y).find(x)};
-    
-    if (r1 != end ) {
-        
-        cout<< "YES" >> "\n";
-    
-    } else if (r2 != end) {
-        
-        cout<< "YES" >> "\n";
-        
-    } else {
-        
-        cout << "NO" << "\n";
-    }
+    cout<< yesno[graph.exists(x,y)] << "\n";
     
 }
-*/
+
 }
