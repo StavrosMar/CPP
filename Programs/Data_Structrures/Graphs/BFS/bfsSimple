@@ -1,0 +1,102 @@
+/* Presenting BFS + path for a simple vector<vector<int>> Graph */
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include <queue>
+#include <list>
+
+using namespace std;
+
+
+// To do - build Graph structure with vectors
+
+
+//Driver Code
+int main() {
+
+int N, M, x, y, Q;
+
+/* Build Graph for DFS */
+//cin >> N >> M ;
+N=5;
+M=6;
+
+int nod1[6]={0,0,1,2,2,4};
+int nod2[6]={1,2,2,0,3,3};
+
+vector<vector<int>> graph(N);
+int index[N];
+
+for (int i{0}; i < M; i++) {
+    
+    cout << "Entering nodes" << "\n" ;
+    //cin >> x >> y ;
+    x = nod1[i];
+    y = nod2[i];
+    
+    index[i] = x;
+    
+    graph[x].push_back(y);
+    graph[y].push_back(x);
+    
+}
+
+// root Node
+queue<int> qq;
+int s{index[0]};
+s = 2;
+qq.push(s);     //push root
+
+vector<bool> visited(N);
+visited.assign(N,false);
+
+int edgeTo[N];
+edgeTo[s] = -1;
+
+int v;
+
+//BFS being run below
+while (!qq.empty() ) {
+    
+    v = qq.front();
+    cout << "Node is" << v << endl;
+    qq.pop();
+    
+    for (auto w : graph[v]) {
+        
+        if (!visited[w]) {
+            edgeTo[w] = v;
+            qq.push(w);
+            visited[w] = true;
+        }
+    }
+    
+}
+
+
+// Find required path
+int node{4};
+list<int> path;
+int aux{node};
+
+while (aux > 0) {
+    
+    path.push_front(aux);
+    aux = edgeTo[aux];
+        
+}
+
+//Print the path found
+cout<<"Path for node:" << node << endl;
+
+for (auto li : path) {
+    cout<<li<<endl;
+
+}
+
+}
+
+
