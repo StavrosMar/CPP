@@ -1,3 +1,6 @@
+// Genetes permuations for a string and prints them out 
+// Taken from geeksForGeeks
+
 #include <iostream>
 
 using namespace std;
