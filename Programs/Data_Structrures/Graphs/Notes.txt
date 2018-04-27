@@ -1,0 +1,6 @@
+I need fast access on the left (outer structure).
+Vector would do.
+
+In the inner one  vector would not seem ideal - a list could work
+- I am not going to do random search inside the second level - but i need fast on the first level
+- List could work in case i need to delete nodes in its middle - vector cost would be very high
