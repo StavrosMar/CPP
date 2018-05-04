@@ -1,6 +1,6 @@
 // This file is to validate that we can have an array
 // of objects of generic type - i.e. array of contiguously arranged elements of type object.
-// The example is using object type = vector
+// The example is using object type = vector.
 
 #include <iostream>
 #include <string>
