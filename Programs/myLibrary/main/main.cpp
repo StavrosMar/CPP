@@ -1,6 +1,6 @@
 
-#include "stv1.h"
-#include "stv2.h"
+#include "../stv1.h"
+#include "../stv2.h"
 
 int main() {
 
