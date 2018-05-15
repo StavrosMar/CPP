@@ -1,28 +1,43 @@
 #include <iostream>
+#include <map>
+#include <string>
 
 using namespace std;
-/*
+
+// Interface class
+class PayOff {
+public:
+	virtual ~PayOff();
+};
+
+//Some other child class inheriting
+class doublePayOff : public PayOff {
+
+	// something;
+
+};
+
 class PayOffFactory {
 
 
 private:
     
     //Making all constructors private;
-    PayOffFactory(const PayOffFactory& p);
-    PayOffFactory();
-    PayOffFactory(PayOffFactory&& p);
+	PayOffFactory() = default;
+	PayOffFactory(const PayOffFactory& p) = default;
+    PayOffFactory(PayOffFactory&& p) = default;
     
-    //Making all assignement operators private;
-    PayOffFactory& operator=(const PayOffFactory& p) {
-        //Calling copy constructor
-        this = new PayOffFactory(p);
-        return *this;
-    }
-    
+    //Making all assignment operators private;
+    PayOffFactory& operator=(const PayOffFactory& p) = default;
     
 public:
     
-    PayOffFactory& Instance();
+    //
+    typedef PayOff* (*CreatePayOffFunction)(double);
+    static PayOffFactory& Instance();
+    PayOff* CreatePayOff(string PayOffId, double Strike);
+
+    ~PayOff(){};
     
 };
 
@@ -33,4 +48,8 @@ PayOffFactory& PayOffFactory::Instance() {
     
 }
 
-*/
+int main() {
+
+	PayOffFactory::Instance();
+
+}

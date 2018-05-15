@@ -115,7 +115,7 @@ public:
 
 };
 
-
+/*
 int main() {
 
 	std::initializer_list<int> il{1,2,3,4}, il2{6,6,6};
@@ -138,6 +138,6 @@ int main() {
 	return 0;
 
 }
-
+*/
 
 
