@@ -19,25 +19,25 @@ class doublePayOff : public PayOff {
 
 class PayOffFactory {
 
-
+// Note - we always have 1 object of PayOffFactory - hence the chopped out constructors, =
 private:
     
     //Making all constructors private;
-	PayOffFactory() = default;
-	PayOffFactory(const PayOffFactory& p) = default;
-    PayOffFactory(PayOffFactory&& p) = default;
-    
+	PayOffFactory() {};
+	PayOffFactory(const PayOffFactory& p) {};
+    PayOffFactory(PayOffFactory&& p)  {};
+
     //Making all assignment operators private;
-    PayOffFactory& operator=(const PayOffFactory& p) = default;
+    PayOffFactory& operator=(const PayOffFactory& p) { return *this;};
     
 public:
     
-    //
+
     typedef PayOff* (*CreatePayOffFunction)(double);
     static PayOffFactory& Instance();
     PayOff* CreatePayOff(string PayOffId, double Strike);
 
-    ~PayOff(){};
+    ~PayOffFactory(){};
     
 };
 
