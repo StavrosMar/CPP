@@ -1,0 +1,9 @@
+#For Eclipse #
+Debug/
+*.project
+*.cproject
+*.prefs
+*.xml
+#For freeForm Files#
+*.out
+*.swp
