@@ -12,16 +12,19 @@ public:
 	static PayOff* Create(const double&);
 };
 
-/*
+
 template <class T> PayOff* PayOffHelper<T>::Create(const double& Strike) {
 
 	return new T(Strike);
 	//TODO - Manage memory leaks in destructor.
-}*/
+}
 
 template <class T> PayOffHelper<T>::PayOffHelper(const string& id) {
 
 	PayOffFactory& thePayOffFactory = PayOffFactory::Instance();
+	//Registering with the string and the reference with the static function.
+	//For all T objects to be created the address of the function is the same -
+
 	thePayOffFactory.RegisterPayOff(id,PayOffHelper<T>::Create);
 }
 
