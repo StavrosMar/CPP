@@ -12,11 +12,12 @@ public:
 	static PayOff* Create(const double&);
 };
 
+/*
 template <class T> PayOff* PayOffHelper<T>::Create(const double& Strike) {
 
 	return new T(Strike);
 	//TODO - Manage memory leaks in destructor.
-}
+}*/
 
 template <class T> PayOffHelper<T>::PayOffHelper(const string& id) {
 
