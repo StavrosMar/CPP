@@ -11,12 +11,13 @@ void randomise (int* A, const size_t sizeA) {
     std::mt19937 bitGen(rd());
     std::uniform_int_distribution<> distr(0,sizeA-1);
      
-    for (unsigned int i = sizeA-1 ; i<sizeA ; --i) {
-        
-        std::swap(A[i],A[distr(bitGen)]);
+    for (unsigned int i = sizeA-1 ; i<sizeA ; i--) {
+        auto num{distr(bitGen)};
+        std::swap(A[i],A[num]);
     }
         
 }
+
 
 template <typename T> class Compare{
 
@@ -24,19 +25,14 @@ public:
 	int operator()(const T& a, const T& b) const {
 		
 		int res{0};
-		
 		if (a < b) {
-		
 			res=-1;
-		} else if (a > b) {
-		 
+		} else if (a > b) { 
 		 	res=1;
-		}
-		
+		}		
 		return res;
 	}
 };
-		
 
 void sort(int* A, const int& lo, const int& hi) {
     
@@ -51,23 +47,21 @@ void sort(int* A, const int& lo, const int& hi) {
     while ( i <= gt ) {
     
     	res = cmp(A[i],A[lo]);
-    	
-    	cout<<"A[i]="<<A[i]<<"  A[lo]="<<A[lo]<<"\n";
+    
+    //	cout<<"A[i]="<<A[i]<<"  A[lo]="<<A[lo]<<"\n";
     	    	
-        if ( res < 0 ) {
-        
-        	cout<<"Entered neg"<<"\n";
+        if ( res < 0 ){
+    		//cout<<"Entered neg"<<"\n";
             swap(A[i],A[lt]);
             ++i;
             ++lt;
-            
-        } else if (res > 0) {
-        	cout<<"Entered pos"<<"\n";        
+           
+        } else if ( res > 0) {
             swap(A[i],A[gt]);
             --gt;
             
         } else {
-        	cout<<"Entered ++i"<<"\n";        
+        	//cout<<"Entered ++i"<<"\n";        
             ++i;
         }
         
@@ -81,8 +75,9 @@ void sort(int* A, const int& lo, const int& hi) {
 int main() {
     
     //Input
-    const size_t sizeA{5};
-    int A[sizeA]={11,90,76,89,7};
+    const size_t sizeA{10};
+    //int A[sizeA]={8,112,90,789,65,0,76,65,89,7};
+    int A[sizeA]={90,112,789,8,65,7,76,0,65,89};
     
     //Randomisation
         //Array before
@@ -91,7 +86,7 @@ int main() {
     }
     cout<<"\n";
     
-    randomise(A,sizeA);
+   //randomise(A,sizeA);
         //Array after randomisation
     for (unsigned int i = 0; i<sizeA ; ++i) {
         cout<<A[i]<<" ";
