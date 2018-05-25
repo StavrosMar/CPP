@@ -1,17 +1,23 @@
 Hello World!
 
-As a young engineer i have been introduced to the world of programming quite long time ago (Matlab, FORTRAN).
+This is a repository I created primarily for practising the following topics :
 
-This is a repository I created for completing advanced (at least for my level) low level C++ features 
-in order to better understand the world of computers and also extend my programming as well as the execution speed of my programs.
-(And also a good chance to learn a bit of computer science if I may :) )
+* Data Structures (Trees, Lists, HashTables)
+* Algorithms (Sort, Search, Graphs)
 
-The Exercises follow the naming convention of the Exercises relevant to http://www.stroustrup.com/4th.html BOOK.
+* Quantitative Finance
 
-If you have any suggestion on my solutions, please feel free to let me know! 
+* C++ Metaprogramming (Templates)
+* C++ inheritance
+* Design Patterns with C++
+* C++ Concurrency ( Multithreading)
+* C++ memory management. 
 
-My email is redenicht@hotmail.com. Just say hi!
+* C++ exercises from "The C++ Programming Language" from Bjarne Stroustrup : http://www.stroustrup.com/4th.html.
 
-Thank you for taking the time to browse my repo.
+
+If you have any suggestions, comments, or just want to say hi we can catch-up on redenicht@hotmail.com.
 
 Keep up the good work!
+
+Stavros
