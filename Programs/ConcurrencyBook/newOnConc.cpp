@@ -33,10 +33,11 @@ Func* interm() {
 	return objFun;
 }
 
-
+/*
 int main() {
 
 	interm();
 	std::cout<<"Main running";
 
 }
+*/
