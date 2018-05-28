@@ -7,3 +7,4 @@ Debug/
 #For freeForm Files#
 *.out
 *.swp
+.DS_Store
