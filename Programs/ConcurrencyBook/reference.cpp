@@ -22,6 +22,7 @@ template <class T> void tclNoRef(T str) {
 
 }
 
+/*
 int main() {
 
 
@@ -57,4 +58,4 @@ int main() {
 	//std::thread t4{tcl<string>,std::ref(std::string(s1))};
 
 	return 0;
-}
+}*/
