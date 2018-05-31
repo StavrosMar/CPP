@@ -47,7 +47,7 @@ private:
 
 };
 
-int main()
+int uncommentsuffix_main()
 {
     int width; // the number of cells on the X axis
     list<Point> ListCoors;
@@ -76,4 +76,6 @@ int main()
    
     // Three coordinates: a node, its right neighbor, its bottom neighbor
     cout << "0 0 1 0 0 1" << endl;
+
+    return 0;
 }
