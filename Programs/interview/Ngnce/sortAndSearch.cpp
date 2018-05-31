@@ -9,16 +9,17 @@ void StavrosSort(int *A, const int& lo, const int& hi) {
 
 		int lt{lo};
 		int gt{hi};
-		int i{lt+1};
+		int i{lo+1};
 
+		// Comparing with lt not lo like djikstra. Djikstra gives bullshit. Mine works.
 		while (i <= gt) {
 
 			if (A[i] < A[lt]) {
 				std::swap(A[i],A[lt]);
 				++i;++lt;
-			} else if ( A[i] > A[gt]) {
+			} else if ( A[i] > A[lt]) {
 				std::swap(A[i], A[gt]);
-				++i; gt--;
+				 gt--;
 			} else {
 				i++;
 			}
@@ -30,13 +31,13 @@ void StavrosSort(int *A, const int& lo, const int& hi) {
 	}
 }
 
-//Not passing pointer - to prevent modification to initial table
+//table modified - since A[] is essentially a pointer
 int findElem(int A[], const int& elem, const size_t& Asize) {
 
 	StavrosSort(A,0,Asize-1);
 	for(int i{0}; i< Asize; ++i) {
 
-		std::cout<<*(A+i)<<" ";
+		std::cout<<A[i]<<" ";
 	}
 
 	std::cout<<"\n";
@@ -47,11 +48,16 @@ int findElem(int A[], const int& elem, const size_t& Asize) {
 
 int main() {
 
+	const int sizeA{20};
+	int A[sizeA] = {90,112,789,8,234,726,9,2,-1,65,7,76,0,65,89};
 
-	int A[10] = {11,13,19,89,20,10};
 
+	int found{findElem(A,11,sizeA)};
 
-	int found{findElem(A,11,10)};
+	for(int i{0}; i< sizeA ; ++i) {
+
+			std::cout<<A[i]<<" ";
+		}
 
 	std::cout<<"Found output"<<found;
 }
