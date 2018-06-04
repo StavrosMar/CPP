@@ -3,6 +3,11 @@
 
 using namespace std;
 
+/* Topics:
+ * 		1) Ensure thread safety so that we cannot drop a running thread.
+ *
+ */
+
 // Move constructor on thread is called here implicitly.
 void f(std::thread t) { cout<<"Running f(std::thread)"<<"\n";};
 
@@ -21,3 +26,17 @@ int main() {
 
 }
 */
+
+/*
+	// Unit Test 2) - constructing a threadguard from a
+int main() {
+
+	std::thread t1{busyFunc};
+
+	thread_kerveros tguardBusy{t1};
+	thread_kerveros tguard2{t1};
+
+	std::thread t2{testJoinable};
+
+	return 0;
+} */

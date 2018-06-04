@@ -28,7 +28,7 @@ private:
 public:
 
 	//Construct from thread;
-	// TODO : Reference way inside the book.
+	// TODO : Reference way - book.
 	explicit thread_kerveros(thread& t1) : _t1(std::move(t1)) {
 
 		// -- Issue 2
@@ -42,7 +42,7 @@ public:
 
 		// -- Issue 2
 		if (!_t1.joinable()) {
-					throw std::logic_error("Current thread still busy - Construction Failed");
+				throw std::logic_error("Current thread still busy - Construction Failed");
 		}
 		cout<<"Constructing with rvalue"<<"\n";
 	};
@@ -60,7 +60,7 @@ public:
 
 };
 
-/*// 1)
+/*// 1) Unit Test for Case 1.
 int main() {
 
 
@@ -80,33 +80,3 @@ int main() {
 
 }*/
 
-// 2)  - write test for case 2  - build a busy function and assign thread to get the logic error.
-// play with detach as well  - detach the thread and try assigning another thread on this object.
-
-void busyFunc() {
-
-	auto start{std::chrono::system_clock::now()};
-	auto duration{std::chrono::seconds(4)};
-
-	cout<<"Concurrent Thread Sleeping at: "+std::to_string((std::chrono::system_clock::to_time_t(start)))+"s\n";
-
-	std::this_thread::sleep_for(duration);
-
-	auto timeEnd{start+duration};
-
-	cout<<"Concurrent Thread Resuming at: "+std::to_string(std::chrono::system_clock::to_time_t(timeEnd))+"s\n";
-
-
-}
-
-int main() {
-
-	std::thread t1{busyFunc};
-	t1.detach();
-	std::this_thread::sleep_for(std::chrono::seconds(2));
-
-	if (!t1.joinable()) {
-		cout<<"t1 thread still busy\n";
-	}
-
-}
