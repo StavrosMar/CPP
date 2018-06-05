@@ -5,38 +5,51 @@ using namespace std;
 
 /* Topics:
  * 		1) Ensure thread safety so that we cannot drop a running thread.
- *
+ * 		   Protection from assigning if current thread has not finished execution - cannot drop a thread (2.6 - scoped_thread)
  */
 
-// Move constructor on thread is called here implicitly.
-void f(std::thread t) { cout<<"Running f(std::thread)"<<"\n";};
+//scoped_thread
+class scoped_thread {
+private:
+	std::thread _t;
 
-void threadFun() { cout<<"Running threadFun"<<"\n"; };
-/*
-int main() {
+public:
+	/*Trying to move thread t.
+	If he is busy, the move will fail, so the construction of _t will fail.
+	Then it will not be joinable*/
+	scoped_thread( std::thread& t) : _t(std::move(t)) {
 
+		if(!_t.joinable()) {
+			throw std::logic_error("NO thread - thread move failed");
+		}
 
-  //f(std::thread(threadFun));
+	};
 
-  std::thread t1{threadFun};
+	scoped_thread(const scoped_thread&) = delete;
+	scoped_thread& operator=(const scoped_thread&) = delete;
 
-  f(std::move(t1));
+};
 
- return 0;
+//Function that runs long enough to let us experiment.
+void busyFunc2() {
+
+	auto start{std::chrono::system_clock::now()};
+	auto duration{std::chrono::seconds(3)};
+
+	cout<<"Concurrent Thread Entering at: "+std::to_string((std::chrono::system_clock::to_time_t(start)))+"s\n";
+
+	std::this_thread::sleep_for(duration);
+
+	auto timeEnd{start+duration};
+
+	cout<<"Concurrent Thread Resuming at: "+std::to_string(std::chrono::system_clock::to_time_t(timeEnd))+"s\n";
+
 
 }
-*/
 
-/*
-	// Unit Test 2) - constructing a threadguard from a
 int main() {
 
-	std::thread t1{busyFunc};
+	std::thread t1(busyFunc2);
+	scoped_thread sthr{t1};
 
-	thread_kerveros tguardBusy{t1};
-	thread_kerveros tguard2{t1};
-
-	std::thread t2{testJoinable};
-
-	return 0;
-} */
+}

@@ -5,7 +5,6 @@
 using namespace std;
 /* Topics:
  * 		1) Guaranteeing thread join with RAII - taking care of main() throwing exceptions before manually joinning the thread
- * 		2) Protection from assigning if current thread has not finished execution - cannot drop a thread (2.6 - scoped_thread)
  */
 
 void throwException() {
@@ -31,19 +30,11 @@ public:
 	// TODO : Reference way - book.
 	explicit thread_kerveros(thread& t1) : _t1(std::move(t1)) {
 
-		// -- Issue 2
-		if (!_t1.joinable()) {
-			throw std::logic_error("Current thread still busy - Construction Failed");
-		}
 		cout<<"constucting with lvalue"<<"\n";
 	};
 
 	explicit thread_kerveros(thread&& t1) : _t1(std::move(t1)) {
 
-		// -- Issue 2
-		if (!_t1.joinable()) {
-				throw std::logic_error("Current thread still busy - Construction Failed");
-		}
 		cout<<"Constructing with rvalue"<<"\n";
 	};
 
@@ -79,4 +70,3 @@ int main() {
 		//... and t2 is joined on its destruction.
 
 }*/
-

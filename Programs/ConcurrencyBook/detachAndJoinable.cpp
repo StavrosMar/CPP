@@ -28,7 +28,7 @@ void busyFunc() {
 
 	// Test to verify that joinable returns 1 even if active thread has been detached.
 	// Make it main to test
-int main() {
+int joinableMain() {
 
 	std::thread t1{busyFunc};
 	t1.detach();
