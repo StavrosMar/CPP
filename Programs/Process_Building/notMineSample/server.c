@@ -8,7 +8,7 @@
 #define SERV_TCP_PORT 8000 /* server's port number */
 #define MAX_SIZE 80
 
-int main(int argc, char *argv[])
+int mainServer(int argc, char *argv[])
 {
   int sockfd, newsockfd, clilen;
   struct sockaddr_in cli_addr, serv_addr;

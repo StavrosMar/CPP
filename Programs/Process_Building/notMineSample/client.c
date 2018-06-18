@@ -9,7 +9,7 @@
 
 #define SERV_TCP_PORT 8000 /* server's port */
 
-int main(int argc, char *argv[])
+int mainClient(int argc, char *argv[])
 {
   int sockfd;
   struct sockaddr_in serv_addr;
