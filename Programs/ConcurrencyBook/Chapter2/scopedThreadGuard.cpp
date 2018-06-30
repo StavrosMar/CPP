@@ -47,7 +47,7 @@ void busyFunc2() {
 
 }
 
-int main() {
+int mainThreaGuard() {
 
 	std::thread t1(busyFunc2);
 	scoped_thread sthr{t1};

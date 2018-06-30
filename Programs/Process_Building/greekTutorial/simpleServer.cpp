@@ -5,7 +5,7 @@
  * 		1) Use observer or another design pattern for listeners
  *
  */
-
+/*
 #include <iostream>
 #include <string>
 #include <sys/socket.h>
@@ -39,4 +39,4 @@ int main() {
 	}
 
 
-}
+}*/
