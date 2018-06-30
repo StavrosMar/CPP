@@ -6,44 +6,54 @@
  */
 
 #include <atomic>
+#include <string>
+#include <iostream>
 #include <thread>
-#include <assert.h>
-std::atomic<bool> x,y;
-std::atomic<int> z;
-void write_x()
-{
-x.store(true,std::memory_order_release);
+#include <atomic>
+#include <cassert>
+#include <vector>
+#include <chrono>
+
+using namespace std;
+
+std::atomic<int> Guard{0};
+int Payload = 0;
+int p{0};
+
+void thread3_1() {
+
+
+	Payload = 42;
+
+
+	Guard.store(1, std::memory_order_release);
+	auto t1_storefinished=chrono::high_resolution_clock::now().time_since_epoch().count();
+		std::cout<<"t1 "+to_string(t1_storefinished)+'\n';
+
+
 }
-void write_y()
-{
-y.store(true,std::memory_order_release);
+
+void thread3_2() {
+	auto t2_loadstarting=chrono::high_resolution_clock::now().time_since_epoch().count();
+	std::cout<<"t2 "+to_string(t2_loadstarting)+'\n';
+	int g{0};
+	while(!g) { g = Guard.load(memory_order_relaxed); };
+		if (g != 0)
+		    p = Payload;
+
 }
-void read_x_then_y()
-{
-while(!x.load(std::memory_order_acquire));
-if(y.load(std::memory_order_acquire))
-++z;
-}
-void read_y_then_x()
-{
-while(!y.load(std::memory_order_acquire));
-if(x.load(std::memory_order_acquire))
-++z;
-}
-int main()
-{
-x=false;
-y=false;
-z=0;
-std::thread a(write_x);
-std::thread b(write_y);
-std::thread c(read_x_then_y);
-std::thread d(read_y_then_x);
-a.join();
-b.join();
-c.join();
-d.join();
-assert(z.load()!=0);
+
+int main() {
+
+	std::thread t1(&thread3_2);
+	std::thread t2(&thread3_1);
+
+	t1.join();
+	t2.join();
+
+
+	std::cout<<p<<'\n';
+	return 0;
 }
 
 

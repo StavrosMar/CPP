@@ -45,8 +45,6 @@ void thread_3() {
 	assert(data[3].load(std::memory_order_relaxed)==-141);
 	assert(data[4].load(std::memory_order_relaxed)==2003);
 
-
-
 }
 
 int atomic2_main() {
@@ -57,9 +55,9 @@ int atomic2_main() {
 
 	go=1;
 
-	t1.join();
-	t2.join();
 	t3.join();
+	t2.join();
+	t1.join();
 
 
 	return 0;
