@@ -5,7 +5,6 @@
  *
  */
 
-#include <atomic>
 #include <string>
 #include <iostream>
 #include <thread>

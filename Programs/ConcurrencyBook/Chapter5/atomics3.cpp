@@ -18,18 +18,15 @@ using namespace std;
 
 std::atomic<int> Guard{0};
 int Payload = 0;
-int p{0};
+int pp{0};
 
 void thread3_1() {
 
-
 	Payload = 42;
-
 
 	Guard.store(1, std::memory_order_release);
 	auto t1_storefinished=chrono::high_resolution_clock::now().time_since_epoch().count();
 		std::cout<<"t1 "+to_string(t1_storefinished)+'\n';
-
 
 }
 
@@ -39,11 +36,10 @@ void thread3_2() {
 	int g{0};
 	while(!g) { g = Guard.load(memory_order_relaxed); };
 		if (g != 0)
-		    p = Payload;
-
+		    pp = Payload;
 }
 
-int main() {
+int atomic3_main() {
 
 	std::thread t1(&thread3_2);
 	std::thread t2(&thread3_1);
@@ -52,7 +48,7 @@ int main() {
 	t2.join();
 
 
-	std::cout<<p<<'\n';
+	std::cout<<pp<<'\n';
 	return 0;
 }
 
