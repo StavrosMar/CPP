@@ -21,9 +21,9 @@ private:
 	//Nodes for the stack/list
 	struct Node {
 		Node* next{nullptr}; // nullptr by default;
-		T	  data;
+		shared_ptr<T>	 data;
 
-		Node(const T& data) : data(data) {};
+		Node(const T& data) : data{make_shared<T>(data)} {};
 	};
 
 	//head of the stack/list
@@ -40,18 +40,11 @@ public:
 	}
 
 	//Pop top element from stack
-	//Return value issue - what if an exception is thrown as part of the copy??
-	T pop() {
+	shared_ptr<T> pop() {
 
-		//TODO - empty stack???
-		//if (head!=nullptr) {
 		Node* old_head = head.load();
-		while(!head.compare_exchange_weak(old_head,old_head->next));
-		auto result = old_head->data;
-		//TODO:But somehow we must delete old_head
-		// can't do the following  - maybe thre is another thread referring to him
-		//	delete old_head;
-		return result;
+		while(old_head  && !head.compare_exchange_weak(old_head,old_head->next));
+		return old_head ? old_head->data : shared_ptr<T>();
 
 	}
 
