@@ -6,6 +6,7 @@
  *   
  *  Topics covered :
  *					1) Build a thread-safe lock-free stack using atomic operations.
+ *					2) Using smart pointers for exception safety when copying
  */
 
 #include <atomic>
