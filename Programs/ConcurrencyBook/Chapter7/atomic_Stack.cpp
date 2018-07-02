@@ -33,13 +33,14 @@ public:
 
 	//Push elements into the stack.
 	void push(const T& data) {
-		Node* const new_node = new Node(data);
+		const Node* new_node = new Node(data);
 		new_node->next = head;
 		//make the new node the updated head - synchronise with other threads as well.
 		while(!head.compare_exchange_weak(new_node->next,new_node,memory_order_release));
 	}
 
 	//Pop top element from stack
+	//Return value issue - what if an exception is thrown as part of the copy??
 	T pop() {
 
 		//TODO - empty stack???
