@@ -10,6 +10,7 @@
 #include <vector>
 #include <stack>
 #include <array>
+#include <fstream>
 
 using namespace std;
 
@@ -39,44 +40,34 @@ int main()
     const int N = 6; //Number or Nodes
     vector<int> adj[N];
     
-    //Edges//
-    //Input and create adjacency list
+    //Build Graph//
+    	//create adjacency list
     int x{0}, y{0};
-    int queries{N};
-    
-    cout<<queries<<'\n';
-    
-    while (!queries) {
-        cin>>x>>y;
-        cout<<"Input is :"<<x<<"  "<<y<<'\n';
+   
+   	ifstream infile;
+	infile.open("input.in");
+
+    while (infile>>x>>y) {
+        cout<<"Edge read : "<<x<<"  "<<y<<'\n';
         if (x<N && y<N) {
             adj[x].push_back(y);
         }
-        
-        --queries;
     }
-    
-    cout<<"Input ended"<<'\n';
-   
+
    //DFS
    stack<int> sta;
-   int s=0; //First edge
+   int s=0;        //s : origin
    sta.push(s);
    
    array<int,N>     edgeTo;
    array<bool,N>    marked;
    marked.fill(false);
    
-   int count{0};
-   if (sta.empty()==true) {
-       cout<<"not empty"<<'\n';
-   }
-
    while (!sta.empty()) {
        
        s = sta.top();
        sta.pop();
-       
+
        //n is the index of 
        for (auto n : adj[s]) {
            if (marked[n] == false ) {
@@ -84,31 +75,30 @@ int main()
                marked[n] = true;
                edgeTo[n] = s;
                sta.push(n);
-               ++count;
-               cout<<count<<'\n';
            }
        }
    }
-   
-   //Edge to node 5
-   
+  	
+   //DFS -  Follow the path to and edge.
+   //Edge to node 5 test
+
    int node = 5;
    int temp{node};
-   
-   // Second stack 
    stack<int> order;
-   while ( temp > -1) {
-       
+   
+   while ( temp > 0) {
        order.push(temp);
        temp = edgeTo[temp];
-       
    }
-  
    while (!order.empty()) {
-       cout<<order.top()<<"->"<<'\n';
+       cout<<"->"<<order.top();
        order.pop();
    }
-   //Topological sort 
+   cout<<'\n';
+
+   //TODO - Accyclic Graph Check
+
+   //TODO - Topological sort 
    
    return 0;
 }
