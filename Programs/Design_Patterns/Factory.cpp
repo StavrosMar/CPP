@@ -13,6 +13,7 @@ class PerfComponent {
     
 public:
     virtual void tune() = 0;
+    virtual ~PerfComponent(); //Virtual Destructor declaration
 };
 
 //Turbo
