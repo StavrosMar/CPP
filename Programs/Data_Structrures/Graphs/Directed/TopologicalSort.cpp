@@ -67,6 +67,10 @@ int main()
        
        s = sta.top();
        sta.pop();
+	
+	if (!marked[s]) {
+           marked[s] = true;
+       }
 
        //n is the index of 
        for (auto n : adj[s]) {
