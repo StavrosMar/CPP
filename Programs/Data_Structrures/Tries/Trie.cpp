@@ -7,6 +7,7 @@ using namespace std;
 *
 *   Topics covered :
 *                   1) Building a Trie (based on Algorithms book)
+*                   2) Manage memory using unique_ptr or shared_ptr for multithreading.
 *
 */
 
