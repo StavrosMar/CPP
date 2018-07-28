@@ -56,21 +56,27 @@ int main()
 
    //DFS
    stack<int> sta;
-   int s=0;        //s : origin
+   int s=2;        //s : origin
    sta.push(s);
    
    array<int,N>     edgeTo;
    array<bool,N>    marked;
    marked.fill(false);
+   array<bool,N>    onStack;
+   onStack.fill(false);
+   bool hasCycle{false};
    
    while (!sta.empty()) {
        
        s = sta.top();
+	   onStack[s] = true;
        sta.pop();
-
+		
        //n is the index of 
        for (auto n : adj[s]) {
-           if (marked[n] == false ) {
+	   	   if (onStack[n] == true) {
+		   		hasCycle = true;
+		   } else if (marked[n] == false ) {
                
                marked[n] = true;
                edgeTo[n] = s;
@@ -82,7 +88,7 @@ int main()
    //DFS -  Follow the path to and edge.
    //Edge to node 5 test
 
-   int node = 5;
+   int node = 3;
    int temp{node};
    stack<int> order;
    
@@ -96,7 +102,8 @@ int main()
    }
    cout<<'\n';
 
-   //TODO - Accyclic Graph Check
+   //TOFIXIT - Accyclic Graph Check
+   (hasCycle == false) ? cout<<"YAY! DAG"<<'\n' : cout<<"No DAG"<<'\n';
 
    //TODO - Topological sort 
    
