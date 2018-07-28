@@ -11,7 +11,9 @@ void StavrosSort(int *A, const int& lo, const int& hi) {
 		int gt{hi};
 		int i{lo+1};
 
-		// Comparing with lt not lo like djikstra. Djikstra gives bullshit. Mine works.
+		// Comparing with lt not lo like djikstra.
+		//Djikstra implementation does not work.
+		//Mine works.
 		while (i <= gt) {
 
 			if (A[i] < A[lt]) {
