@@ -39,7 +39,7 @@ class TpSort {
 
 private:
    //-//DFS
-   static const int N = 5; //Number or Nodes
+   static const int N = 6; //Number or Nodes
    stack<int> sta;
    array<int,N>     edgeTo;
    array<bool,N>    marked;
@@ -47,7 +47,7 @@ private:
    //For Topological Sort
    array<bool,N>    onStack;
    bool hasCycle{false};
-   queue<int> preOrder;
+   stack<int> tpOrder;
    
 
 void dfs(int s) {
@@ -62,7 +62,7 @@ void dfs(int s) {
 	      onStack[s] = true;
 	      sta.pop();
 	   
-	   	   preOrder.push(s);
+	   	   tpOrder.push(s);
 	      if (!marked[s]) {
 	          marked[s] = true;
 	      }
@@ -132,6 +132,8 @@ int run()
 			dfs(s);
 			
 		}
+
+		onStack.fill(false);
    }
   	
    //DFS -  Follow the path to and edge.
@@ -149,14 +151,16 @@ int run()
        order.pop();
    }
    cout<<'\n';
-   
+  
+   isAcyclic();
+
 	//TODO - Topological sort 
    cout<<"### Topological Sort PreOrder ####"<<'\n';
-   while (!preOrder.empty()) {
+   while (!tpOrder.empty()) {
 
-		cout<<preOrder.front()<<"~~";
+		cout<<tpOrder.top()<<"~~";
 
-		preOrder.pop();
+		tpOrder.pop();
    }
    cout<<'\n';
    return 0;

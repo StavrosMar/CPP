@@ -39,52 +39,20 @@ class TpSort {
 
 private:
    //-//DFS
-   static const int N = 5; //Number or Nodes
+   static const int N = 6; //Number or Nodes
    stack<int> sta;
-   array<int,N>     edgeTo;
+   array<int,N>     edgeTo; //Not needed for the Sort, valid for 1 DFS
    array<bool,N>    marked;
    vector<int> adj[N];
+	vector<int> indices;
    //For Topological Sort
    array<bool,N>    onStack;
    bool hasCycle{false};
-   queue<int> preOrder;
+   stack<int> tpOrder;
    
 
-void dfs(int s) {
 
-	  //-//CoreDFS
-	  //s : origin
-	  sta.push(s);
-	
-	  while (!sta.empty()) {
-	      
-	      s = sta.top();
-	      onStack[s] = true;
-	      sta.pop();
-	   
-	   	   preOrder.push(s);
-	      if (!marked[s]) {
-	          marked[s] = true;
-	      }
-	      
-	      for (auto n : adj[s]) {
-	
-	      	   //For DAG
-	   	   if (onStack[n] == true) {
-	   	   		hasCycle = true;
-	   	   }
-	
-	   	   if (marked[n] == false ) {
-	              
-	              marked[n] = true;
-	              edgeTo[n] = s;
-	              sta.push(n);
-	          }
-	      }
-	  }
-
-}
-
+//Normally TpSort would take as an argument the Graph g - separate class
 void initialise() {
     
     
@@ -96,20 +64,44 @@ void initialise() {
 	infile.open("input.in");
 
     while (infile>>x>>y) {
-        cout<<"Edge read : "<<x<<"  "<<y<<'\n';
         if (x<N && y<N) {
             adj[x].push_back(y);
+			indices.push_back(x);
         }
     }
+	for (int i=0; i<N ; ++i) {
+			for (auto y : adj[i]) {
+        		cout<<"Edge read : "<<i<<"  "<<y<<'\n';
+			}
+	}
+}
 
+void dfs(int s) {
+
+	  //-//CoreDFS
+	  
+	  marked[s] = true;
+	  onStack[s] = true;
+	  
+	  for (auto n : adj[s]) {
+		 //For DAG
+		 if (onStack[n] == true) {
+	   	 	hasCycle = true;
+	   	 }
+
+	  	 if (!marked[n]) {
+			edgeTo[n] = s;
+			dfs(n);
+		 }
+	  }
+	  onStack[s] = false;
+	  tpOrder.push(s);
 }
 
 void isAcyclic() {
    // Accyclic Graph Check
    (hasCycle == false) ? cout<<"YAY! DAG"<<'\n' : cout<<"No DAG"<<'\n';
 }
-
-
 
 public:
 
@@ -125,15 +117,14 @@ int run()
    //For Topological Sort, we run classic DFS node-times 
    // each time with different origin, since we need to find global
    // ordering.
-   for ( int s{0} ; s<N ; ++s ) {
+   for ( int ind{0} ; ind < N; ++ind ) {
    
-   		if (!marked[s]) {
-
-			dfs(s);
-			
+   		if (!marked[ind]) {
+			dfs(ind);
 		}
    }
-  	
+  
+   /*
    //DFS -  Follow the path to and edge.
    //Edge to node 5 test
    int node = 3;
@@ -149,14 +140,17 @@ int run()
        order.pop();
    }
    cout<<'\n';
+   */
+
+   this->isAcyclic();
    
-	//TODO - Topological sort 
+	//Topological sort 
    cout<<"### Topological Sort PreOrder ####"<<'\n';
-   while (!preOrder.empty()) {
+   while (!tpOrder.empty()) {
 
-		cout<<preOrder.front()<<"~~";
+		cout<<tpOrder.top()<<"~~";
 
-		preOrder.pop();
+		tpOrder.pop();
    }
    cout<<'\n';
    return 0;
@@ -169,5 +163,4 @@ int main() {
 
 TpSort tp;
 tp.run();
-
 }
