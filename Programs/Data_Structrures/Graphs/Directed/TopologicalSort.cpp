@@ -71,7 +71,15 @@ int main()
        s = sta.top();
 	   onStack[s] = true;
        sta.pop();
+<<<<<<< HEAD
 		
+=======
+	
+	if (!marked[s]) {
+           marked[s] = true;
+       }
+
+>>>>>>> 70c1ff55e54d68024b6adea782b58b17c859fc34
        //n is the index of 
        for (auto n : adj[s]) {
 	   	   if (onStack[n] == true) {
