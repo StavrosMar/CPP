@@ -8,3 +8,5 @@ Debug/
 *.out
 *.swp
 .DS_Store
+*otMine*.cpp
+
