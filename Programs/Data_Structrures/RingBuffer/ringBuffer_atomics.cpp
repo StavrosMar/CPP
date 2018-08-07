@@ -2,7 +2,9 @@
 *               Stripped down implementation of ringBuffer.cpp 
 *
 *   Topics covered :
-*                1) TODO - fix pop synchronisation
+*                1) Pop has become lock-free.
+*                2) TODO - push lock free
+*                3) Compare Pop with a Lock-based - mutex or spinlock implementation.
 *
 */
 
@@ -74,7 +76,7 @@ template <typename T> void RingBuffer<T>::push(const T& s) {
 }
 
 template <typename T> void RingBuffer<T>::pop() {
-   //TEMP-REMOVE
+   //TEMP-REMOVE - for synchronising all open threads.
   bool entered = false;
   for (;;) {
   //TEMP-REMOVE
@@ -85,6 +87,7 @@ template <typename T> void RingBuffer<T>::pop() {
         auto t  = tail.load(std::memory_order_acquire);
         if ( count.load(std::memory_order_acquire) != 0) {
              bool changed = tail.compare_exchange_weak(t,(t+1)%N,std::memory_order_acq_rel);
+             //Load / Syncronise count before subtracting && only do it if the value was successfully changed
              if (changed && count.load(std::memory_order_acquire) != 0) {
                     //count.compare_exchange_weak(c,c-1,std::memory_order_acq_rel);
                     count.fetch_sub(1,std::memory_order_release);
@@ -104,12 +107,17 @@ template <typename T> void RingBuffer<T>::pop() {
    
 }
 
+//Testing thread//
 int main() {
     
+    //Create a buffer.
     RingBuffer<int> buff1(100);
   
+    //Push a value into a buffer
     buff1.push(12);
+    buff1.push(122);
     
+    //Spawn 6 threads that try to pop a value.
     std::thread t1{&RingBuffer<int>::pop,&buff1};
     std::thread t2{&RingBuffer<int>::pop,&buff1};
     std::thread t3{&RingBuffer<int>::pop,&buff1};
@@ -117,8 +125,10 @@ int main() {
     std::thread t5{&RingBuffer<int>::pop,&buff1};
     std::thread t6{&RingBuffer<int>::pop,&buff1};
     
+    //Make sure they start at the same time
     buff1.g_threadStart = true;
     
+    //Join the results.
     t1.join();
     t2.join();
     t3.join();
@@ -126,8 +136,4 @@ int main() {
     t5.join();
     t6.join();
     
-    //Need custom operators for iterators.
-   // for (auto elem : buff1) {
-    //    cout<<"Elem"<<elem<<'\n';
-    //}
 }
