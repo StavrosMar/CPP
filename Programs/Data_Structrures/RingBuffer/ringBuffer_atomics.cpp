@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <array>
+#include <atomic>
 
 using namespace std;
 
@@ -17,9 +18,9 @@ template <class T> class RingBuffer {
 private:
     const unsigned int N;
     T* A{nullptr}; // array
-    unsigned int head;
-    unsigned int tail;
-    unsigned int count = 0;
+    atomic<unsigned int> head;
+    atomic<unsigned int> tail;
+    atomic<unsigned int> count;
     
     //STL interface for looping - TODO : Separate class of custom iterators.
     using const_iter = const T*;
@@ -28,7 +29,13 @@ private:
 public:
     
     //Constructors - Destructor
-    RingBuffer(const unsigned int& iN) :N{iN}, A{new T[N]}, head{0},tail{0} {};
+    RingBuffer(const unsigned int& iN) :N{iN}, A{new T[N]} {
+         //atomics initialisatinos
+        count.store(0);
+        tail.store(0);
+        head.store(0);
+    };
+    
     RingBuffer() = delete;
     RingBuffer(const RingBuffer& r) = delete;
     ~RingBuffer() { delete[] A;}
@@ -46,7 +53,7 @@ template <typename T> unsigned int RingBuffer<T>::capacity() const {
 
 template <typename T> void RingBuffer<T>::push(const T& s) {
     
-    if (count<N) {
+/*    if (count<N) {
         A[head] = s;
         head = ++head%N;
         ++count;
@@ -55,13 +62,19 @@ template <typename T> void RingBuffer<T>::push(const T& s) {
         //Output to log...
         cout<<"Error : Buffer is full - discarding data : "<<'\n';
     }
+*/
 }
 
 template <typename T> void RingBuffer<T>::pop() {
-    if (count!=0) {
-        tail = ++tail%N;
-        --count;
-    }
+   
+    bool changed_t = false;
+    
+        auto c = count.load(); //syncronise loads with stores
+        auto t  = tail.load();
+        if (c != 0) {
+            tail.compare_exchange_weak(t,(t+1)%N,std::memory_order_release,std::memory_order_relaxed);
+        }
+        count.fetch_sub(1,std::memory_order_release);
 }
 
 int main() {
