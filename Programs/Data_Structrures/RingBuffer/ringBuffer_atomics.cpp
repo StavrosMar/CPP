@@ -69,10 +69,10 @@ template <typename T> void RingBuffer<T>::pop() {
    
     bool changed_t = false;
     
-        auto c = count.load(); //syncronise loads with stores
-        auto t  = tail.load();
+        auto c = count.load(std::memory_order_acquire); //syncronise loads with stores
+        auto t  = tail.load(std::memory_order_acquire);
         if (c != 0) {
-            tail.compare_exchange_weak(t,(t+1)%N,std::memory_order_release,std::memory_order_relaxed);
+            tail.compare_exchange_weak(t,(t+1)%N,std::memory_order_acq_rel);
         }
         count.fetch_sub(1,std::memory_order_release);
 }
