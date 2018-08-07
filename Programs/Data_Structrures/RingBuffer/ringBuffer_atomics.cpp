@@ -2,14 +2,14 @@
 *               Stripped down implementation of ringBuffer.cpp 
 *
 *   Topics covered :
-*                1) TODO - lock free
-*                3) TODO - define iterators
+*                1) TODO - fix pop synchronisation
 *
 */
 
 #include <iostream>
 #include <array>
 #include <atomic>
+#include <thread>
 
 using namespace std;
 
@@ -20,13 +20,16 @@ private:
     T* A{nullptr}; // array
     atomic<unsigned int> head;
     atomic<unsigned int> tail;
-    atomic<unsigned int> count;
+    atomic<int> count;
     
     //STL interface for looping - TODO : Separate class of custom iterators.
     using const_iter = const T*;
     //implement iterators properly...
     
 public:
+    
+    ////TEMP-REMOVE
+    bool g_threadStart = false; //To syncronise threads
     
     //Constructors - Destructor
     RingBuffer(const unsigned int& iN) :N{iN}, A{new T[N]} {
@@ -53,43 +56,75 @@ template <typename T> unsigned int RingBuffer<T>::capacity() const {
 
 template <typename T> void RingBuffer<T>::push(const T& s) {
     
-/*    if (count<N) {
-        A[head] = s;
-        head = ++head%N;
-        ++count;
+    unsigned int c = count.load();
+    unsigned int h = head.load();
+    
+    /* NOT THREAD-SAFE  - TODO */
+    if (c<N) {
+        A[h] = s;
+        h = ++h%N;
+        ++c;
+        count.store(c,std::memory_order_release);
         
     } else {
         //Output to log...
         cout<<"Error : Buffer is full - discarding data : "<<'\n';
     }
-*/
+
 }
 
 template <typename T> void RingBuffer<T>::pop() {
-   
-    bool changed_t = false;
-    
-        auto c = count.load(std::memory_order_acquire); //syncronise loads with stores
+   //TEMP-REMOVE
+  bool entered = false;
+  for (;;) {
+  //TEMP-REMOVE
+    if (g_threadStart) {
+       
+        
+        auto c  = count.load(std::memory_order_acquire); //syncronise loads with stores
         auto t  = tail.load(std::memory_order_acquire);
-        if (c != 0) {
-            tail.compare_exchange_weak(t,(t+1)%N,std::memory_order_acq_rel);
+        if (c > 0) {
+             count.fetch_sub(1,std::memory_order_release);
+             bool changed = tail.compare_exchange_weak(t,(t+1)%N,std::memory_order_acq_rel);
+             if (changed) {
+                 std::cout<<"--Removing Element,  Count = "+to_string(c)+"--"+'\n';
+             }
+        } else {
+            std::cout<<"--Buffer Empty--"<<'\n';
         }
-        count.fetch_sub(1,std::memory_order_release);
+        entered = true;
+     }
+     
+     //TEMP-REMOVE
+     if (entered) {
+        std::cout<<"--  Count is = "+to_string(count.load(std::memory_order_acquire))+"--"+'\n';
+         break; //Stop the loop
+     }
+   }
+   
 }
 
 int main() {
     
-    const int buffSize{4};
-    RingBuffer<int> buff1(buffSize);
-    //RingBuffer<int> buff2(buff1);
+    RingBuffer<int> buff1(100);
   
-    buff1.push(1);
-    buff1.push(4);
-    buff1.push(5);
-    buff1.push(6);
-    buff1.pop();
-    buff1.pop();
-    buff1.push(8);
+    buff1.push(12);
+    
+    std::thread t1{&RingBuffer<int>::pop,&buff1};
+    std::thread t2{&RingBuffer<int>::pop,&buff1};
+    std::thread t3{&RingBuffer<int>::pop,&buff1};
+    std::thread t4{&RingBuffer<int>::pop,&buff1};
+    std::thread t5{&RingBuffer<int>::pop,&buff1};
+    std::thread t6{&RingBuffer<int>::pop,&buff1};
+    
+    buff1.g_threadStart = true;
+    
+    t1.join();
+    t2.join();
+    t3.join();
+    t4.join();
+    t5.join();
+    t6.join();
     
     //Need custom operators for iterators.
    // for (auto elem : buff1) {
