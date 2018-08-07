@@ -91,7 +91,8 @@ template <typename T> void RingBuffer<T>::pop() {
              if (changed && count.load(std::memory_order_acquire) != 0) {
                     //count.compare_exchange_weak(c,c-1,std::memory_order_acq_rel);
                     count.fetch_sub(1,std::memory_order_release);
-                    std::cout<<"--Removing Element,  Count = "+to_string(count.load())+"--"+'\n';
+                    std::cout<<"--Removing Element,  Count = "+to_string(count.load(std::memory_order_acquire))+", "
+                                    +"TailIndex after pop ="+to_string(tail.load(std::memory_order_acquire))+'\n';
              }
         } else {
             std::cout<<"--Buffer Empty--"<<'\n';
