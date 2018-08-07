@@ -82,17 +82,15 @@ template <typename T> void RingBuffer<T>::pop() {
   //TEMP-REMOVE
     if (g_threadStart) {
        
-        
-        
         auto t  = tail.load(std::memory_order_acquire);
         if ( count.load(std::memory_order_acquire) != 0) {
              bool changed = tail.compare_exchange_weak(t,(t+1)%N,std::memory_order_acq_rel);
              //Load / Syncronise count before subtracting && only do it if the value was successfully changed
-             if (changed && count.load(std::memory_order_acquire) != 0) {
-                    //count.compare_exchange_weak(c,c-1,std::memory_order_acq_rel);
-                    count.fetch_sub(1,std::memory_order_release);
+             auto c =  count.load(std::memory_order_acquire) ;
+             if (changed && c != 0) {
+                    count.compare_exchange_weak(c,c-1,std::memory_order_acq_rel);
                     std::cout<<"--Removing Element,  Count = "+to_string(count.load(std::memory_order_acquire))+", "
-                                    +"TailIndex after pop ="+to_string(tail.load(std::memory_order_acquire))+'\n';
+                    +"TailIndex after removal ="+to_string(tail.load(std::memory_order_acquire))+'\n';
              }
         } else {
             std::cout<<"--Buffer Empty--"<<'\n';
