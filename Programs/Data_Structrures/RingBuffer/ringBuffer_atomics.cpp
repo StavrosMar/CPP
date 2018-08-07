@@ -20,7 +20,7 @@ private:
     T* A{nullptr}; // array
     atomic<unsigned int> head;
     atomic<unsigned int> tail;
-    atomic<int> count;
+    atomic<unsigned int> count;
     
     //STL interface for looping - TODO : Separate class of custom iterators.
     using const_iter = const T*;
@@ -81,13 +81,14 @@ template <typename T> void RingBuffer<T>::pop() {
     if (g_threadStart) {
        
         
-        auto c  = count.load(std::memory_order_acquire); //syncronise loads with stores
+        
         auto t  = tail.load(std::memory_order_acquire);
-        if (c > 0) {
-             count.fetch_sub(1,std::memory_order_release);
+        if ( count.load(std::memory_order_acquire) != 0) {
              bool changed = tail.compare_exchange_weak(t,(t+1)%N,std::memory_order_acq_rel);
-             if (changed) {
-                 std::cout<<"--Removing Element,  Count = "+to_string(c)+"--"+'\n';
+             if (changed && count.load(std::memory_order_acquire) != 0) {
+                    //count.compare_exchange_weak(c,c-1,std::memory_order_acq_rel);
+                    count.fetch_sub(1,std::memory_order_release);
+                    std::cout<<"--Removing Element,  Count = "+to_string(count.load())+"--"+'\n';
              }
         } else {
             std::cout<<"--Buffer Empty--"<<'\n';
@@ -97,7 +98,6 @@ template <typename T> void RingBuffer<T>::pop() {
      
      //TEMP-REMOVE
      if (entered) {
-        std::cout<<"--  Count is = "+to_string(count.load(std::memory_order_acquire))+"--"+'\n';
          break; //Stop the loop
      }
    }
