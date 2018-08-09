@@ -35,9 +35,9 @@ public:
     //Constructors - Destructor
     RingBuffer(const unsigned int& iN) :N{iN}, A{new T[N]} {
          //atomics initialisatinos
-        count.store(0);
-        tail.store(0);
-        head.store(0);
+        count.store(0,std::memory_order_release);
+        tail.store(0,std::memory_order_release);
+        head.store(0,std::memory_order_release);
     };
     
     RingBuffer() = delete;
@@ -48,11 +48,12 @@ public:
     void push(const T& s); //Add smth in the buffer
     void pop(); //Remove last elem from the buffer
     unsigned int capacity() const;
+    void debugPush() const;
 
 };
 
 template <typename T> unsigned int RingBuffer<T>::capacity() const {
-    return count;
+    return count.load(std::memory_order_release);
 };
 
 template <typename T> void RingBuffer<T>::push(const T& s) {
@@ -63,28 +64,23 @@ template <typename T> void RingBuffer<T>::push(const T& s) {
   //TEMP-DEBUG-REMOVE
     if (g_threadStart) {
     
-        //Core
-       bool changed = false;
-               
-            unsigned int h = head.load(std::memory_order_acquire);
+        //Core          
             if ( count.load(std::memory_order_acquire) < N ) {
-                while(!head.compare_exchange_weak(h,(h+1)%N,std::memory_order_acq_rel));
-                auto c =  count.load(std::memory_order_acquire) ;
-                if (c < N-1 )  {
-                    count.compare_exchange_weak(c,c+1,std::memory_order_acq_rel);
-                    A[h] = s;
-                    cout<<"Pushed : "+to_string(s)+" Head is"+to_string(head.load(std::memory_order_acquire))+"\n";
-                }
+                    if (count.fetch_add(1,std::memory_order_release) <=N ) {
+                        unsigned int h = head.load(std::memory_order_acquire);
+                        A[h] = s;
+                        while( !head.compare_exchange_weak(h,(h+1)%N,std::memory_order_acq_rel) );  
+                        cout<<"Pushed : "+to_string(s)+"Head after push"+to_string(head.load(std::memory_order_acquire))+'\n';
+                    }
             }
-
-        //}
+                    
         entered = true;
-    }
-     
-    //TEMP-DEBUG-REMOVE
-    if (entered) {
-         break; //Stop the loop
      }
+      
+      //TEMP-DEBUG-REMOVE
+         if (entered) {
+            break; //Stop the loop
+         }
    }
 
 }
@@ -121,6 +117,13 @@ template <typename T> void RingBuffer<T>::pop() {
    
 }
 
+template <typename T> void RingBuffer<T>::debugPush() const {
+      std::cout<<"Head is"<<head.load(std::memory_order_acquire)<<'\n';
+      for (int i =0 ; i<N ; ++i) {
+          std::cout<<"Element: "+to_string(i)+" = "<<A[i]<<'\n';
+      }
+}
+
 int main() {
     
     //Initialise some values
@@ -130,7 +133,7 @@ int main() {
     //Push Test
     vector<std::thread> threads;
     
-    for (int i=0 ; i<BUFF_SIZE; ++i) { //Make threads
+    for (int i=0 ; i<2*BUFF_SIZE; ++i) { //Make threads
         threads.push_back(std::move(thread(&RingBuffer<int>::push,&buff1,i+10))); //call push of object buff1 with argument i.
     }
   
@@ -140,6 +143,8 @@ int main() {
         t.join();
     }
     
+    std::cout<<"Count is "<<buff1.capacity(); // Verify capacity
+    buff1.debugPush(); //Verify head;
     /*
     //Pop Test
     //buff1.push(12);
