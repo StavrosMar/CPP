@@ -76,19 +76,17 @@ template <typename T> void RingBuffer<T>::push(const T& s) {
 }
 
 template <typename T> void RingBuffer<T>::pop() {
-   //TEMP-REMOVE - for synchronising all open threads.
+   //TEMP-REMOVE
   bool entered = false;
   for (;;) {
   //TEMP-REMOVE
     if (g_threadStart) {
-       
-        auto t  = tail.load(std::memory_order_acquire);
+        
+       auto t  = tail.load(std::memory_order_acquire);
         if ( count.load(std::memory_order_acquire) != 0) {
              bool changed = tail.compare_exchange_weak(t,(t+1)%N,std::memory_order_acq_rel);
-             //Load / Syncronise count before subtracting && only do it if the value was successfully changed
-             auto c =  count.load(std::memory_order_acquire) ;
-             if (changed && c != 0) {
-                    count.compare_exchange_weak(c,c-1,std::memory_order_acq_rel);
+             
+             if (changed && count.fetch_sub(1,std::memory_order_release) != 0) { //Load / Syncronise count before subtracting && only do it if the value was successfully changed
                     std::cout<<"--Removing Element,  Count = "+to_string(count.load(std::memory_order_acquire))+", "
                     +"TailIndex after removal ="+to_string(tail.load(std::memory_order_acquire))+'\n';
              }
