@@ -2,9 +2,7 @@
 *               Stripped down implementation of ringBuffer.cpp 
 *
 *   Topics covered :
-*                1) Pop has become lock-free.
-*                2) TODO - push lock free
-*                3) Compare Pop with a Lock-based - mutex or spinlock implementation.
+*                1) TODO - fix pop synchronisation
 *
 */
 
@@ -12,6 +10,7 @@
 #include <array>
 #include <atomic>
 #include <thread>
+#include <vector>
 
 using namespace std;
 
@@ -58,45 +57,63 @@ template <typename T> unsigned int RingBuffer<T>::capacity() const {
 
 template <typename T> void RingBuffer<T>::push(const T& s) {
     
-    unsigned int c = count.load();
-    unsigned int h = head.load();
+  //TEMP-DEBUG-REMOVE
+  bool entered = false;
+  for (;;) {
+  //TEMP-DEBUG-REMOVE
+    if (g_threadStart) {
     
-    /* NOT THREAD-SAFE  - TODO */
-    if (c<N) {
-        A[h] = s;
-        h = ++h%N;
-        ++c;
-        count.store(c,std::memory_order_release);
-        
-    } else {
-        //Output to log...
-        cout<<"Error : Buffer is full - discarding data : "<<'\n';
+        //Core
+       bool changed = false;
+               
+            unsigned int h = head.load(std::memory_order_acquire);
+            if ( count.load(std::memory_order_acquire) < N ) {
+                while(!head.compare_exchange_weak(h,(h+1)%N,std::memory_order_acq_rel));
+                auto c =  count.load(std::memory_order_acquire) ;
+                if (c < N-1 )  {
+                    count.compare_exchange_weak(c,c+1,std::memory_order_acq_rel);
+                    A[h] = s;
+                    cout<<"Pushed : "+to_string(s)+" Head is"+to_string(head.load(std::memory_order_acquire))+"\n";
+                }
+            }
+
+        //}
+        entered = true;
     }
+     
+    //TEMP-DEBUG-REMOVE
+    if (entered) {
+         break; //Stop the loop
+     }
+   }
 
 }
 
 template <typename T> void RingBuffer<T>::pop() {
-   //TEMP-REMOVE
+  //TEMP-DEBUG-REMOVE
   bool entered = false;
   for (;;) {
-  //TEMP-REMOVE
+  //TEMP-DEBUG-REMOVE
     if (g_threadStart) {
         
+       //Core
        auto t  = tail.load(std::memory_order_acquire);
         if ( count.load(std::memory_order_acquire) != 0) {
              bool changed = tail.compare_exchange_weak(t,(t+1)%N,std::memory_order_acq_rel);
-             
-             if (changed && count.fetch_sub(1,std::memory_order_release) != 0) { //Load / Syncronise count before subtracting && only do it if the value was successfully changed
+             auto c =  count.load(std::memory_order_acquire) ;
+             if (changed && c != 0) { //Load / Syncronise count before subtracting && only do it if the value was successfully changed
+                    count.compare_exchange_weak(c,c-1,std::memory_order_acq_rel);
                     std::cout<<"--Removing Element,  Count = "+to_string(count.load(std::memory_order_acquire))+", "
                     +"TailIndex after removal ="+to_string(tail.load(std::memory_order_acquire))+'\n';
              }
         } else {
             std::cout<<"--Buffer Empty--"<<'\n';
         }
+        
         entered = true;
      }
      
-     //TEMP-REMOVE
+     //TEMP-DEBUG-REMOVE
      if (entered) {
          break; //Stop the loop
      }
@@ -104,17 +121,30 @@ template <typename T> void RingBuffer<T>::pop() {
    
 }
 
-//Testing thread//
 int main() {
     
-    //Create a buffer.
-    RingBuffer<int> buff1(100);
+    //Initialise some values
+    const int BUFF_SIZE{10};
+    RingBuffer<int> buff1(BUFF_SIZE);
   
-    //Push a value into a buffer
-    buff1.push(12);
-    buff1.push(122);
+    //Push Test
+    vector<std::thread> threads;
     
-    //Spawn 6 threads that try to pop a value.
+    for (int i=0 ; i<BUFF_SIZE; ++i) { //Make threads
+        threads.push_back(std::move(thread(&RingBuffer<int>::push,&buff1,i+10))); //call push of object buff1 with argument i.
+    }
+  
+    buff1.g_threadStart = true; //Fire all threads to start.
+    
+    for (auto& t : threads) { //Join the results.
+        t.join();
+    }
+    
+    /*
+    //Pop Test
+    //buff1.push(12);
+    //buff1.push(122);
+    
     std::thread t1{&RingBuffer<int>::pop,&buff1};
     std::thread t2{&RingBuffer<int>::pop,&buff1};
     std::thread t3{&RingBuffer<int>::pop,&buff1};
@@ -122,15 +152,16 @@ int main() {
     std::thread t5{&RingBuffer<int>::pop,&buff1};
     std::thread t6{&RingBuffer<int>::pop,&buff1};
     
-    //Make sure they start at the same time
     buff1.g_threadStart = true;
     
-    //Join the results.
     t1.join();
     t2.join();
     t3.join();
     t4.join();
     t5.join();
     t6.join();
+    */
     
+    //Pop-Push test combined.
+
 }
