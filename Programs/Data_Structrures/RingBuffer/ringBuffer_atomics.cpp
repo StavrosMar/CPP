@@ -2,9 +2,7 @@
 *               Stripped down implementation of ringBuffer.cpp 
 *
 *   Topics covered :
-*                1) Pop atomic
-*                2) Push atomic
-*                3) TODO: test for push/pop at the same time.
+*                1) TODO - fix pop synchronisation
 *
 */
 
@@ -69,10 +67,10 @@ template <typename T> void RingBuffer<T>::push(const T& s) {
         //Core          
             if ( count.load(std::memory_order_acquire) < N ) {
                     if (count.fetch_add(1,std::memory_order_release) <=N ) {
-                        unsigned int h = head.load(std::memory_order_acquire);
-                        A[h] = s;
+                        auto h = head.load(std::memory_order_acquire);
                         while( !head.compare_exchange_weak(h,(h+1)%N,std::memory_order_acq_rel) );  
-                        cout<<"Pushed : "+to_string(s)+"Head after push"+to_string(head.load(std::memory_order_acquire))+'\n';
+                        A[h] = s;
+                        cout<<"Pushed : "+to_string(A[h])+" - Head after push"+to_string(head.load(std::memory_order_acquire))+'\n';
                     }
             }
                     
