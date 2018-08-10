@@ -2,8 +2,9 @@
 *               Stripped down implementation of ringBuffer.cpp 
 *
 *   Topics covered :
-*                1) TODO - fix pop synchronisation
-*
+*                1) Pop  atomic
+*                2) Push atomic
+*                3) TODO - Verify push/pop at the same time work ok.
 */
 
 #include <iostream>
