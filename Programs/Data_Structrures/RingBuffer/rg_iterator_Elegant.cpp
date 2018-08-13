@@ -2,9 +2,9 @@
 *
 *   Topics covered:
 *                1) Iterator for my ringBuffer
-*                2) TODO - Consolidate Eliminate code for iterator and const iterator
+*                2) Consolidate Eliminate code for iterator and const iterator
 *                3) TODO - complete operators
-*                4) TODO - equality / conversions between const iter and iter should work
+*                4) Equality / conversions between const iter and iter should work
 *
 */
 
@@ -13,23 +13,23 @@
 using namespace std;
 
 template <typename T, bool Const = false> class rg_iterator { //by default non-const iterator
-
-public:
- 
-    //TODO-make these private again.
-    T*            _ptr;
-    int           _indx;
-    const size_t _size;
+   
+    //Friend declaration necessary to make members visible to copy/conversion constructor.
+    friend class rg_iterator<T, true>;
     
     typedef typename std::conditional<Const, const T, T>::type IterType; 
     using pointer = IterType*;
     using reference = IterType&;
     
-
+    T*            _ptr;
+    int           _indx;
+    const size_t _size;
     
-
+  public:  
+ 
+    //Constructors
     rg_iterator(T* ptr_start,const int& index, const size_t& N) : _ptr{ptr_start}, _indx{index}, _size{N} {};
-    rg_iterator(const rg_iterator<T,false>& i) : _ptr{i._ptr}, _indx{i._indx}, _size{i._size} {};
+    rg_iterator(const rg_iterator<T,false>& i) : _ptr{i._ptr}, _indx{i._indx}, _size{i._size} {}; //Very important to add template parameters - A temporary object is created before conversion below on ==
     rg_iterator() = delete;
 
     reference operator*() {
@@ -47,17 +47,8 @@ public:
     //Here we are forcing a conversion - thus the copy constructor is called and needed.
     friend bool operator==(const rg_iterator& x,
                           const rg_iterator& y) {
-      return x._ptr == y._ptr;
+      return (x._ptr == y._ptr && x._indx == y._indx && x._size == y._size) ;
    }
-   
-    /*bool operator==(const rg_iterator<T,Const>& it2) {
-        
-        bool retval{false};
-        if (this->_ptr == it2._ptr) { //Problem - i need to to make each class friend of the other ... getting complicated and byte hungry.......
-            retval = true;
-        }
-        return retval;
-    }*/
     
 };
 
