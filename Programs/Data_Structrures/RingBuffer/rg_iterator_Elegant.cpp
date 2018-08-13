@@ -12,15 +12,16 @@
 
 using namespace std;
 
-template <typename T> class rg_iterator {
+template <typename T, bool Const = false> class rg_iterator { //by default non-const iterator
 
 private:
     T*            _ptr;
     int           _indx;
     const size_t _size;
     
-    using pointer = T*;
-    using reference = T&;
+    typedef typename std::conditional<Const, const T, T>::type IterType; 
+    using pointer = IterType*;
+    using reference = IterType&;
     
 public:
     
@@ -40,16 +41,20 @@ public:
         _ptr = _ptr+diff;
     }
     
-    typedef typename std::conditional<std::is_const<T>::value, T, const T>::type type ; 
     
-    bool operator==(const rg_iterator<type>& it2) {
+    friend bool operator==(const rg_iterator& x,
+                          const rg_iterator& y) {
+      return x._ptr == y._ptr;
+   }
+   
+    /*bool operator==(const rg_iterator<T,Const>& it2) {
         
         bool retval{false};
         if (this->_ptr == it2._ptr) { //Problem - i need to to make each class friend of the other ... getting complicated and byte hungry.......
             retval = true;
         }
         return retval;
-    }
+    }*/
     
     
 };
@@ -75,7 +80,7 @@ int main()
    //Test const iterator
    cout<<"\n=== Const Iterator - Testing ===\n"<<endl;
    int b[2]={10,20};
-   rg_iterator<const int> it2{&b[0],0,2};
+   rg_iterator<int,true> it2{&b[0],0,2};
    cout<<"=== b: Increasing iterator using ++it==="<<endl;
    cout<<"*it="<<*it2<<endl;
    ++it2;
@@ -89,7 +94,7 @@ int main()
    
    //Relationship between const and non-const
    cout<<"\n=== Iterator - Const iterator relationship ==="<<endl;
-   rg_iterator<const int> it3{&a[0],0,2};
+   rg_iterator<int,true> it3{&a[0],0,2};
    cout<<"Equal iterators? : "<<(it==it3)<<endl; //Problem !! - Need to explicitly define operators for handling const and non-const iterators.
    
    return 0;
