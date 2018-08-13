@@ -14,7 +14,9 @@ using namespace std;
 
 template <typename T, bool Const = false> class rg_iterator { //by default non-const iterator
 
-private:
+public:
+ 
+    //TODO-make these private again.
     T*            _ptr;
     int           _indx;
     const size_t _size;
@@ -23,10 +25,11 @@ private:
     using pointer = IterType*;
     using reference = IterType&;
     
-public:
+
     
 
     rg_iterator(T* ptr_start,const int& index, const size_t& N) : _ptr{ptr_start}, _indx{index}, _size{N} {};
+    rg_iterator(const rg_iterator<T,false>& i) : _ptr{i._ptr}, _indx{i._indx}, _size{i._size} {};
     rg_iterator() = delete;
 
     reference operator*() {
@@ -41,7 +44,7 @@ public:
         _ptr = _ptr+diff;
     }
     
-    
+    //Here we are forcing a conversion - thus the copy constructor is called and needed.
     friend bool operator==(const rg_iterator& x,
                           const rg_iterator& y) {
       return x._ptr == y._ptr;
@@ -55,7 +58,6 @@ public:
         }
         return retval;
     }*/
-    
     
 };
 
