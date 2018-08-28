@@ -4,9 +4,13 @@ Debug/
 *.cproject
 *.prefs
 *.xml
+*.vscode
 #For freeForm Files#
 *.out
 *.swp
 .DS_Store
 *otMine*.cpp
+#Make and CMake
+cmake-build*/
+CMakeLists.txt
 
