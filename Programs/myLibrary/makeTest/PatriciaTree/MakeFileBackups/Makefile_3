@@ -1,0 +1,18 @@
+CC=g++ 
+CXXFLAGS=-std=c++17
+
+#Add Dependicies i.e. header files where when their corresponding cpp file changes
+#Then recompilation should be triggered for main.
+DEPS = util.h patricia.h
+#Output object resulting from cpp files compilation.
+OBJ = main.o util.o patricia.o
+
+%.o: %.cpp %.hpp $(DEPS)
+	$(CC) -c -o $@ $< $(CXXFLAGS)
+
+bin_main: $(OBJ)
+	$(CC) -o $@ $^ $(CXXFLAGS)
+
+.PHONY: clean
+clean:
+	rm -f $(OBJ) bin_main

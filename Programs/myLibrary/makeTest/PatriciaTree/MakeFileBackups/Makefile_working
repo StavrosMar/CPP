@@ -1,0 +1,11 @@
+CC=g++
+CXXFLAGS=-std=c++17
+DEPS = patricia.cpp
+OBJ = main.o patricia.o
+
+%.o: %.cpp $(DEPS)
+	$(CC) -c -o $@ $< $(CXXFLAGS)
+
+bin_main: $(OBJ)
+	$(CC) -o $@ $^ $(CXXFLAGS)
+
