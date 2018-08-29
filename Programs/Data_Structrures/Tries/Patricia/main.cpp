@@ -7,8 +7,9 @@ int main() {
 
 	//bit_get Test -- passed
 	for (int i{0}; i<24; i++) {
-		cout<<Node<int>::bit_get("Nik",i);
+		cout<<bit_get("Nik",i);
+		cout<<bit_get("Nikos",3);
 	}
-
+	
 	return 0;
 }

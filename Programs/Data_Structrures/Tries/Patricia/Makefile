@@ -1,5 +1,5 @@
 CC=g++
-CXXFLAGS=-std=c++17
+CXXFLAGS=-std=c++17 -g -v
 DEPS = patricia.cpp 
 OBJ = main.o patricia.o
 
@@ -9,3 +9,5 @@ OBJ = main.o patricia.o
 main: $(OBJ)
 	$(CC) -o $@ $^ $(CXXFLAGS)
 
+clean: 
+	rm -f *.o
