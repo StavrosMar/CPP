@@ -1,18 +1,5 @@
-/*
-*   Topics covered:
-*                    1) Patricia Trie implementation
-*						a) insert
-*						b) search
-*						c) delete
-*                   
-*/
+#include "utils.h"
 
-//for template linking
-#ifndef PAT_C
-#define PAT_C
-
-#include "patricia.h"
-/*
 //Get the nth bit of the stream s	
 //Validated
 	 int bit_get(const char* str,const int& n,const size_t nchars) {
@@ -68,37 +55,3 @@
 		}
 			return bitInd;
 	}
-//Patricia Node
-template <class T> struct Node{
-
-	//members
-	Node*   right; // Set to this by Default at compile time
-	Node*   left;
-	string	key;
-	T	  	data;
-	int bitIndex;
-
-	//Constructors
-	Node(); //Maybe delete(?)
-	Node(const string& key, const T& data);
-	Node(const Node& n) = delete;
-	Node operator=(const Node& n) = delete;
-
-};*/
-
-template <class T> Node<T>::Node() {
-	left = this;
-	right = this;
-	bitIndex = 0;
-	//the rest default construction.
-}
-
-template <class T> Node<T>::Node(const string& key, const T& data) {
-	left = this;
-	right = this;
-	bitIndex = 0;
-	this->data = data;
-	this->key = key;
-}
-
-#endif

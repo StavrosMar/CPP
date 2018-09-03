@@ -7,15 +7,21 @@
 *                   
 */
 
-//for template linking
-#ifndef PAT_C
-#define PAT_C
+//#pragma once 
 
-#include "patricia.h"
-/*
+
+#ifndef PAT_H
+#define PAT_H
+
+#include <iostream>
+#include <vector>
+#include "utils.h"
+
+using namespace std;
+
 //Get the nth bit of the stream s	
 //Validated
-	 int bit_get(const char* str,const int& n,const size_t nchars) {
+/*	 int bit_get(const char* str,const int& n,const size_t nchars=1) {
 		
 		unsigned int indx = n/BITS_ASCII;
 
@@ -29,11 +35,11 @@
 		};
 		return bit;
 	}
-
+*/
 	//Utility functions
 	//maybe make the below a friend i.e. generic function
 	//Built it with std::strings  - could try char instead.
-	int bit_diff(const string& s1, const string& s2) {
+/*	int bit_diff(const string& s1, const string& s2) {
 
 			const string* smlst;
 			const string* lgst; //pointer to shortest and longest string
@@ -68,6 +74,7 @@
 		}
 			return bitInd;
 	}
+*/
 //Patricia Node
 template <class T> struct Node{
 
@@ -84,21 +91,10 @@ template <class T> struct Node{
 	Node(const Node& n) = delete;
 	Node operator=(const Node& n) = delete;
 
-};*/
+};
 
-template <class T> Node<T>::Node() {
-	left = this;
-	right = this;
-	bitIndex = 0;
-	//the rest default construction.
-}
-
-template <class T> Node<T>::Node(const string& key, const T& data) {
-	left = this;
-	right = this;
-	bitIndex = 0;
-	this->data = data;
-	this->key = key;
-}
+//for template linking
+#include "patricia.cpp"
 
 #endif
+

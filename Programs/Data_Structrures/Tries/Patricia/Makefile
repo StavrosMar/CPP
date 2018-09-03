@@ -1,13 +1,19 @@
 CC=g++
+LDFLAGS = 
 CXXFLAGS=-std=c++17 -g -v
-DEPS = patricia.cpp 
-OBJ = main.o patricia.o
 
-%.o: %.cpp $(DEPS)
-	$(CC) -c -o $@ $< $(CXXFLAGS)
+src = $(wildcard *.cpp)
+obj = $(src:.cpp=.o)
+dep  = $(obj:.o=.d)
 
-main: $(OBJ)
+main: $(obj)
 	$(CC) -o $@ $^ $(CXXFLAGS)
 
+%.d: %.cpp
+	@$(CC) $(CXXFLAGS) $< -MM -MT $(@:.d=.o) >$@
+
 clean: 
-	rm -f *.o
+	rm -f $(obj) main
+
+cleandep:
+	rm -f $(dep)
