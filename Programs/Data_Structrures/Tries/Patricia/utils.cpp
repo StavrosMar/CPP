@@ -35,23 +35,49 @@
 			int indx{-1};
 			bool flag{false};
 
-			while (!flag && indx<smlst->length()) {
+			while (flag==false && indx<static_cast<int>(smlst->length())) {
 				++indx;
 				if (s1[indx]!=s2[indx]) {
 					flag = true;
 				}
 			}
+			cout<<"flag="<<flag<<" Index = "<<indx<<'\n';
 			int bitInd;
 			if (flag) {
 				int i{0};
 				while(bit_get(&s1[indx],i)==bit_get(&s2[indx],i)) {
 					++i;
 				}
-				bitInd = (indx+1)*BITS_ASCII+i; //(i+1-1)
+				bitInd = (indx)*BITS_ASCII+i; //(i+1-1)
 			} else if ( !flag && (s1.length() != s2.length()) ) { //dissimilar sizes
-				bitInd = (indx+1)*BITS_ASCII; // (-1+1)
+				bitInd = (indx)*BITS_ASCII; // (-1+1)
 			} else { 
 				bitInd = 0; // same string
 		}
 			return bitInd;
 	}
+
+void test_unit_utils() {
+
+//Bit utils tests - util.h
+	const string s1{"nika"},s2{"nika"};
+
+	//-//bit_get Test -- passed
+	for (int i{0}; i<8*max(s1.length(),s2.length()); i++) {
+		cout<<bit_get(&s1[0],i,s1.length())<<"  ";
+	}
+	cout<<"\n";
+	for (int i{0}; i<8*max(s1.length(),s2.length()); i++) {
+		cout<<bit_get(&s2[0],i,s2.length())<<"  ";
+	}
+	cout<<"\n";
+	for (int i{0}; i<8*max(s1.length(),s2.length()); i++) {
+		cout<<i<<"  ";
+	}
+
+	cout<<"\n\n";
+
+	//bit_diff Test -- passed
+	cout<<bit_diff(s1,s2)<<'\n';
+
+}
