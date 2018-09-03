@@ -8,8 +8,8 @@ int main() {
 
 	cout<<"\n\n";
 
-	//Tests utils.cpp
-	test_unit_utils();
+	//Running Unitary Tests utils.cpp
+	test_unit_binUtil();
 
 
 

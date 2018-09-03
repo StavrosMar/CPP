@@ -41,7 +41,7 @@
 					flag = true;
 				}
 			}
-			cout<<"flag="<<flag<<" Index = "<<indx<<'\n';
+
 			int bitInd;
 			if (flag) {
 				int i{0};
@@ -53,11 +53,13 @@
 				bitInd = (indx)*BITS_ASCII; // (-1+1)
 			} else { 
 				bitInd = 0; // same string
+				//TODO - distinguish same string 
+				// and not matching at all string ???
 		}
 			return bitInd;
 	}
 
-void test_unit_utils() {
+void test_unit_binUtil() {
 
 //Bit utils tests - util.h
 	const string s1{"nika"},s2{"nika"};
