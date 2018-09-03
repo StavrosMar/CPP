@@ -12,5 +12,6 @@ Debug/
 *otMine*.cpp
 #Make and CMake
 cmake-build*/
+*.o
 CMakeLists.txt
 
