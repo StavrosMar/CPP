@@ -28,4 +28,19 @@ template <class T> Node<T>::Node(const string& key, const T& data) {
 	this->key = key;
 }
 
+template <class T> bool PTrie<T>::insert(const string& key,const T& data) {
+
+
+
+}
+
+template <class T> std::pair<bool,T> PTrie<T>::find(const string& key) const {
+
+}
+
+template <class T> bool PTrie<T>::remove(const string& key) {
+
+
+}
+
 #endif
