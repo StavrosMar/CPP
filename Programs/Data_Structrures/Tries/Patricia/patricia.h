@@ -42,12 +42,19 @@ template <class T> struct Node{
 template <class T> class PTrie {
 private:
 
-unique_ptr<Node<T>> root;
+//TODO - Make it unique
+//unique_ptr<Node<T>> root;
+Node<T>* root;
 
 public:
-	
+
 	//Constructors
-	PTrie() : root{make_unique<Node<T>>} {}; //TODO-Exception Handling
+	//PTrie() : root{make_unique<Node<T>>} {}; //TODO-Exception Handling
+	PTrie() : root(new Node<T>) {};
+	PTrie(const PTrie&) = delete; //delete for now
+	PTrie operator=(const PTrie&) = delete; //delete for now
+	PTrie operator=(PTrie&&) = delete; //delete for now
+
 
 	//Member functions
 	bool insert(const string& key,const T& data);

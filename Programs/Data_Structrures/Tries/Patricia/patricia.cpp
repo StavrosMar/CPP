@@ -28,9 +28,28 @@ template <class T> Node<T>::Node(const string& key, const T& data) {
 	this->key = key;
 }
 
+//Insert the string
 template <class T> bool PTrie<T>::insert(const string& key,const T& data) {
 
+	Node<T>* c = root;//the child node
+	Node<T>* p = root;
 
+	//Search and stop at the first upwards link 
+	while (c->bitIndex > p->bitIndex) {
+		p = c;
+		(bit_get(key.c_str(),c->bitIndex)) ? c = p->right : c = p->left;
+	}
+
+	//Key Exists on Tree - then don't add it.
+	if (c->key == key) {
+		return false;
+	}
+
+	// Create pointer - assign - stitch etc....
+	//...
+	//auto indx = bit_diff(key,p->key);
+	//auto bval = bit_get(key.c_str(),indx);
+			
 
 }
 
