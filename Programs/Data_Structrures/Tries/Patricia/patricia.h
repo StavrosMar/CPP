@@ -50,7 +50,7 @@ public:
 
 	//Constructors
 	//PTrie() : root{make_unique<Node<T>>} {}; //TODO-Exception Handling
-	PTrie() : root(new Node<T>) {};
+	PTrie() : root(new Node<T>()) {};
 	PTrie(const PTrie&) = delete; //delete for now
 	PTrie operator=(const PTrie&) = delete; //delete for now
 	PTrie operator=(PTrie&&) = delete; //delete for now
@@ -58,7 +58,8 @@ public:
 
 	//Member functions
 	bool insert(const string& key,const T& data);
-	pair<bool,T> find(const string& key) const;
+	std::pair<bool,const Node<T>*> findptr(const string& key) const;
+	std::pair<bool,T> find(const string& key) const;
 	bool remove(const string& key);
 
 };

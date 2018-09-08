@@ -4,14 +4,27 @@
 int main() {
 
 	//Running Unitary Tests utils.cpp
-	test_unit_binUtil();
+	/*test_unit_binUtil();
 
 	//a) Constructor - passed
 	Node<int> a("lala",3);
-
+	*/
 	//Patricia Tests
+	//-//Construction test
 	PTrie<int> patricia;
 
-	
-	return 0;
+	//-//Insert Test
+
+	patricia.insert("s",18);   //01110011 
+	patricia.insert("a",121);  //01100001
+	patricia.insert("b",124);  //01100010
+	patricia.insert("l",124);  //01101100 
+
+
+
+	//Issue - when adding the 2nd one - i can't find the first one
+
+	auto res{patricia.find("b")};
+	cout<<"Result is :"<<res.second<<endl;
+
 }
