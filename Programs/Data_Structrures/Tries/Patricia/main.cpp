@@ -18,11 +18,11 @@ int main() {
 	patricia.insert("s",18);   //01110011 
 	patricia.insert("a",121);  //01100001
 	patricia.insert("b",124);  //01100010
-	patricia.insert("l",124);  //01101100 
+	//patricia.insert("l",124);  //01101100 
 
 
 
-	//Issue - when adding the 2nd one - i can't find the first one
+	//Issue - when adding the 3rd one - i can't find the second one
 
 	auto res{patricia.find("b")};
 	cout<<"Result is :"<<res.second<<endl;

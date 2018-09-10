@@ -50,7 +50,7 @@ public:
 
 	//Constructors
 	//PTrie() : root{make_unique<Node<T>>} {}; //TODO-Exception Handling
-	PTrie() : root(new Node<T>()) {};
+	PTrie() : root(new Node<T>("Root",T())) {};
 	PTrie(const PTrie&) = delete; //delete for now
 	PTrie operator=(const PTrie&) = delete; //delete for now
 	PTrie operator=(PTrie&&) = delete; //delete for now

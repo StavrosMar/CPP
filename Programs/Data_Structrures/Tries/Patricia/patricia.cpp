@@ -33,19 +33,29 @@ template <class T> Node<T>::Node(const string& key, const T& data) {
 template <class T> pair<bool,const Node<T>*> PTrie<T>::findptr(const string& key) const {
 	
 	Node<T>* p = root;
-	Node<T>* c;
-	(bit_get(key.c_str(),p->bitIndex),key.length()) ? c = p->right : c = p->left;
+	Node<T>* c = root->right;
 	
 	//-//Search and stop at the first upwards link 
 	while (c->bitIndex > p->bitIndex) {
 		p = c;
-		(bit_get(key.c_str(),p->bitIndex),key.length()) ? c = p->right : c = p->left;
-		cout<<"Performing loop"<<'\n';
+		auto bitdiff = bit_diff(key,c->key);
+		auto bit = bit_get(key.c_str(),bitdiff,key.length());
+		(bit) ? c = c->right : c = c->left;
+		cout<<"\nSearch Loop: bit ="<<bit<<'\n';
+		cout<<"p = :"<<p->key<<"| c = :"<<c->key<<endl;
+		cout<<"key = :"<<key<<"| c->bitIndex"<<c->key<<endl;
 	}
 
 	pair<bool,const Node<T>*> ret;
+	cout<<"Search stopped at = "<<c->key<<" c->right = "<<c->right->key<<" c->left = "<<c->left->key<<'\n';
+	cout<<" | c->right->right="<<c->right->right->key;
+	cout<<" | c->right->left="<<c->right->left->key;
+	cout<<" | c->left->right="<<c->left->right->key;
+	cout<<" | c->right->left="<<c->right->left->key<<'\n';
+
+
 	(c->key == key) ? ret.first = true : ret.first = false;
-	ret.second = p;
+	ret.second = c;
 	return ret;
 }
 
@@ -76,36 +86,33 @@ template <class T> bool PTrie<T>::insert(const string& key,const T& data) {
 
 	cout<<"\nL1 : Adding "<<key<<endl;
 
-	
-	Node<T>* c = root->right;
-	Node<T>* p = c;
+	Node<T>* p = root;
+	Node<T>* t = root->right;
 
-	int indkey;
+	int indx{10},bit{0};
 
-	//-//Search down the trie to find insertion point
-	bool ftime = true;
-	while ((indkey > c->bitIndex && c->bitIndex > p->bitIndex) || ftime) {
-		ftime = false;
-		p = c;	
-		indkey = bit_diff(key,p->key);
-		cout<<"indkey  = "<<indkey<<'\n';
-		bit_get(key.c_str(),indkey,key.length()) ? c = p->right : c = p->left;
-		cout<<"bit_Index c = "<<c->bitIndex<<" key: "<<c->key<<'\n';
+	while(indx > t->bitIndex && t->bitIndex > p->bitIndex ) {
+		indx = bit_diff(key,t->key);
+		bit = bit_get(key.c_str(),indx,key.length());
+		p = t;
+		(bit) ? t = t->right : t->left;
+		cout<<"p = :"<<p->key<<"| t = :"<<t->key<<endl;
 	}
 
 	Node<T>* x = new Node<T>(key,data); //build new node.
-	x->bitIndex = indkey;
-
+	x->bitIndex = bit_diff(key,p->key);
+	cout<<"x->bitIndex ="<<x->bitIndex<<endl;
 	if (!bit_get(key.c_str(),x->bitIndex,key.length())) {
 		p->left = x;
-		x->right = c;
+		x->right = t;
 		cout<<"Entered first"<<'\n';
 	} else {
 		p->right = x;
-		x->left = c;
-
+		x->left = t;
 		cout<<"Entered second"<<'\n';
 	}
+
+	cout<<"p->left  = "<<(p->left)->key<<'\n';
 
 	return true;
 	
