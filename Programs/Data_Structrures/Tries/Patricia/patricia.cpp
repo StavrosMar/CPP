@@ -35,15 +35,18 @@ template <class T> pair<bool,const Node<T>*> PTrie<T>::findptr(const string& key
 	Node<T>* p = root;
 	Node<T>* c = root->right;
 	
+	int bit;
 	//-//Search and stop at the first upwards link 
 	while (c->bitIndex > p->bitIndex) {
 		p = c;
+		cout<<"\nSearch Loop comparing \""<<key<<"\"with \""<<c->key<<"\""<<'\n';
 		auto bitdiff = bit_diff(key,c->key);
-		auto bit = bit_get(key.c_str(),bitdiff,key.length());
-		(bit) ? c = c->right : c = c->left;
-		cout<<"\nSearch Loop: bit ="<<bit<<'\n';
-		cout<<"p = :"<<p->key<<"| c = :"<<c->key<<endl;
-		cout<<"key = :"<<key<<"| c->bitIndex"<<c->key<<endl;
+		if (bitdiff>=0) {
+			bit = bit_get(key.c_str(),bitdiff,key.length());
+			(bit) ? c = c->right : c = c->left;
+		}
+		cout<<"p = "<<p->key<<" | c = :"<<c->key<<endl;
+		cout<<"bit ="<<bit<<"| bitdiff ="<<bitdiff<<endl;
 	}
 
 	pair<bool,const Node<T>*> ret;
@@ -89,19 +92,20 @@ template <class T> bool PTrie<T>::insert(const string& key,const T& data) {
 	Node<T>* p = root;
 	Node<T>* t = root->right;
 
-	int indx{10},bit{0};
+	int indx{0},bit{0};
 
-	while(indx > t->bitIndex && t->bitIndex > p->bitIndex ) {
+	while(bit_diff(key,t->key) > t->bitIndex && t->bitIndex > p->bitIndex ) {
 		indx = bit_diff(key,t->key);
 		bit = bit_get(key.c_str(),indx,key.length());
 		p = t;
-		(bit) ? t = t->right : t->left;
-		cout<<"p = :"<<p->key<<"| t = :"<<t->key<<endl;
+		(bit) ? t = t->right : t = t->left;
+		cout<<"p = :"<<p->key<<"| t = :"<<t->key<<" | bit = "<<bit<<" | indx = "<<indx<<endl;
 	}
 
 	Node<T>* x = new Node<T>(key,data); //build new node.
 	x->bitIndex = bit_diff(key,p->key);
 	cout<<"x->bitIndex ="<<x->bitIndex<<endl;
+	
 	if (!bit_get(key.c_str(),x->bitIndex,key.length())) {
 		p->left = x;
 		x->right = t;
@@ -112,7 +116,7 @@ template <class T> bool PTrie<T>::insert(const string& key,const T& data) {
 		cout<<"Entered second"<<'\n';
 	}
 
-	cout<<"p->left  = "<<(p->left)->key<<'\n';
+	cout<<"p->left  = "<<(p->left)->key<<"| p->right  = "<<(p->right)->key<<'\n';
 
 	return true;
 	

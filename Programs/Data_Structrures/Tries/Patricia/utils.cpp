@@ -2,8 +2,9 @@
 
 //Get the nth bit of the stream s	
 //Validated
-	 int bit_get(const char* str,const int& n,const size_t nchars) {
+	 int bit_get(const char* str,const int& nn,const size_t nchars) {
 		
+		unsigned int n = abs(nn);
 		unsigned int indx = n/BITS_ASCII;
 
 		unsigned int bitmod = n%BITS_ASCII; // bit (0-7) ASCII
@@ -52,7 +53,7 @@
 			} else if ( !flag && (s1.length() != s2.length()) ) { //dissimilar sizes
 				bitInd = (indx)*BITS_ASCII; // (-1+1)
 			} else { 
-				bitInd = 0; // same string
+				bitInd = -1; // same string
 				//TODO - distinguish same string 
 				// and not matching at all string ???
 		}

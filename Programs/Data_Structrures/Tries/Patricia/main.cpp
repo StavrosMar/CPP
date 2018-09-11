@@ -13,18 +13,30 @@ int main() {
 	//-//Construction test
 	PTrie<int> patricia;
 
-	//-//Insert Test
+	//-//Insert Test - TODO - All but Nikos not found
+	vector<string> test_insert{"s","anna","l","an","anna","ni","Nikos"};
+	int i=0; 
+	for (auto s : test_insert) {
+		cout<<"***TestAdd : "<<s<<","<<i<<endl;
+		patricia.insert(s,i);
+		++i;
+	}
 
+	for (auto s : test_insert) {
+		
+		auto res{patricia.find(s)};
+		cout<<"***Validation for \""<<s<<"\" = "<<res.second<<endl;
+		
+	}
+
+	/*
 	patricia.insert("s",18);   //01110011 
-	patricia.insert("a",121);  //01100001
-	patricia.insert("b",124);  //01100010
-	//patricia.insert("l",124);  //01101100 
+*/
 
 
+	//Issue - when adding more than 2 - i can't find the intermediate ones
 
-	//Issue - when adding the 3rd one - i can't find the second one
-
-	auto res{patricia.find("b")};
-	cout<<"Result is :"<<res.second<<endl;
+	/*auto res{patricia.find("ann")};
+	cout<<"Result is :"<<res.second<<endl;*/
 
 }
