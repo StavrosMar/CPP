@@ -14,11 +14,13 @@ int main() {
 	PTrie<int> patricia;
 
 	//-//Insert Test - TODO - All but Nikos not found
-	vector<string> test_insert{"s","anna","l","an","anna","ni","Nikos"};
+	vector<string> test_insert{"s","anna","l","an","anna","Nikos","ni","Lala","Lal","Os","os"};
+	//vector<string> test_insert{"Nikos"};
+	
 	int i=0; 
 	for (auto s : test_insert) {
-		cout<<"***TestAdd : "<<s<<","<<i<<endl;
-		patricia.insert(s,i);
+		cout<<"***TestAdd : "<<s<<","<<i+10<<endl;
+		patricia.insert(s,i+10);
 		++i;
 	}
 
