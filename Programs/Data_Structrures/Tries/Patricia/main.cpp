@@ -13,10 +13,12 @@ int main() {
 	//-//Construction test
 	PTrie<int> patricia;
 
-	//-//Insert Test - TODO - All but Nikos not found
-	vector<string> test_insert{"s","anna","l","an","anna","Nikos","ni","Lala","Lal","Os","os"};
-	//vector<string> test_insert{"Nikos"};
+	//-//Insert Test - b makes cacoal dissappear.
+	//vector<string> test_insert{"Coala","salma","acoa","kiki","salma","Couki","caoal","CoCoala","sal","0coal","b};
+	vector<string> test_insert{"acoa","kiki","caoal","b"};
 	
+
+
 	int i=0; 
 	for (auto s : test_insert) {
 		cout<<"***TestAdd : "<<s<<","<<i+10<<endl;

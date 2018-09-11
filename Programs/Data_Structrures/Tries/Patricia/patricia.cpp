@@ -29,7 +29,7 @@ template <class T> Node<T>::Node(const string& key, const T& data) {
 }
 
 //Search down the tree
-//returns true/false and pointer to last child traversed.
+//returns true/false and pointer to last child traversed. - TODO take this as guide to start search for insert after.
 template <class T> pair<bool,const Node<T>*> PTrie<T>::findptr(const string& key) const {
 	
 	Node<T>* p = root;
@@ -41,14 +41,15 @@ template <class T> pair<bool,const Node<T>*> PTrie<T>::findptr(const string& key
 	while (c->bitIndex > p->bitIndex || first) {
 		first  = false;
 		p = c;
-		//cout<<"\nSearch Loop comparing \""<<key<<"\"with \""<<c->key<<"\""<<'\n';
+	//	cout<<"\nSearch Loop comparing \""<<key<<"\"with \""<<c->key<<"\""<<'\n';
 		auto bitdiff = bit_diff(key,c->key);
 		if (bitdiff>=0) {
 			bit = bit_get(key.c_str(),bitdiff,key.length());
 			(bit) ? c = c->right : c = c->left;
 		}
-		//cout<<"p = "<<p->key<<" | c = :"<<c->key<<endl;
-		//cout<<"bit ="<<bit<<"| bitdiff ="<<bitdiff<<endl;
+	/*	cout<<"p = "<<p->key<<" | c = :"<<c->key<<endl;
+		cout<<"bit ="<<bit<<"| bitdiff ="<<bitdiff<<endl;
+	*/
 	}
 
 	pair<bool,const Node<T>*> ret;
@@ -65,7 +66,7 @@ template <class T> pair<bool,const Node<T>*> PTrie<T>::findptr(const string& key
 }
 
 template <class T> std::pair<bool,T> PTrie<T>::find(const string& key) const {
-	
+
 	pair<bool,const Node<T>*> foundp = findptr(key);
 	pair<bool,T> retp;
 
@@ -79,7 +80,8 @@ template <class T> std::pair<bool,T> PTrie<T>::find(const string& key) const {
 	return retp;
 }
 
-//Insert the string
+//Insert the string 
+//-//TODO Cleanup - use better existing search routine.
 template <class T> bool PTrie<T>::insert(const string& key,const T& data) {
 
 	//If key already exists don't added.
@@ -95,19 +97,21 @@ template <class T> bool PTrie<T>::insert(const string& key,const T& data) {
 	Node<T>* t = root;
 
 	int indx{0},bit{0};
-	bool first = true;
-	while((bit_diff(key,t->key) > t->bitIndex && t->bitIndex > p->bitIndex )|| first) {
+	bool first = true; 
+	while ( (t->bitIndex > p->bitIndex) || first) {
+	//while((bit_diff(key,t->key) > t->bitIndex && t->bitIndex > p->bitIndex )|| first) {
 		first = false;
 		indx = bit_diff(key,t->key);
 		bit = bit_get(key.c_str(),indx,key.length());
 		p = t;
 		(bit) ? t = t->right : t = t->left;
-		//cout<<"p = :"<<p->key<<"| t = :"<<t->key<<" | bit = "<<bit<<" | indx = "<<indx<<endl;
+		cout<<"\n p = :"<<p->key<<" | t = :"<<t->key<<" | bitvalue = "<<bit<<" | indx diff(key,p) = "<<indx<<endl;
+		cout<<"t->bitIndex = :"<<t->bitIndex<<" | p->bitIndex = :"<<p->bitIndex<<endl;
 	}
 
 	Node<T>* x = new Node<T>(key,data); //build new node.
-	x->bitIndex = bit_diff(key,p->key);
-	//cout<<"x->bitIndex ="<<x->bitIndex<<endl;
+	x->bitIndex = indx;
+	cout<<"x->bitIndex ="<<x->bitIndex<<endl;
 	
 	if (!bit_get(key.c_str(),x->bitIndex,key.length())) {
 		p->left = x;
@@ -119,7 +123,7 @@ template <class T> bool PTrie<T>::insert(const string& key,const T& data) {
 	//	cout<<"Entered second"<<'\n';
 	}
 
-	//cout<<"p->left  = "<<(p->left)->key<<"| p->right  = "<<(p->right)->key<<'\n';
+//	cout<<"-Addition : p->left  = "<<(p->left)->key<<"| p->right  = "<<(p->right)->key<<'\n';
 
 	return true;
 	

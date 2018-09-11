@@ -1,14 +1,17 @@
 /*
 *   Topics covered:
 *                    1) Patricia Trie implementation
-*						a) insert
-*						b) search
+*						a) insert - DONE
+*						b) search - DONE
 *						c) delete
-*                   
+*						c) delete - memory management and cleanup. 
+*   				
+*					 2) Optional :
+*						Logging levels for debugging. (inheritance etc(?))
+*								
 */
 
 //#pragma once 
-
 
 #ifndef PAT_H
 #define PAT_H
