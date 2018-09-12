@@ -16,20 +16,28 @@ using namespace std;
 //Elementary database record - 1 line.
 //TODO - Variadic i.e. for an unlimited number of fields
 // S is key type and T is the first field sitting under it.
-template<typename S, typename T1> struct spair {
-	S key; //Key 1
-	T1 f1; //Field 1
+template<typename S, typename F1> class spair {
+public:
+	S _key; //Key 1
+	F1 _f1; //Field 1
+	spair(const S& k, const F1& f) : _key{k}, _f1{f}{};
+	
+	const S& key() const {
+		return this->_key;
+	}
+	const F1& f1() const {
+		return this->_f1;
+	}
 };
 
-vector<spair<string,int>>&& loadData(const char* file,const size_t& nfields = 2) {
+vector<spair<string,int>> loadData(const char* file,const size_t& nfields = 2) {
 
 	std::vector<spair<string,int>> Db;
 	ifstream f;
 	f.open(file);
 	
-	string key, strline;
-	int    level;
 	//Scan every line
+	std::string strline;
 	while (getline(f,strline)) {
 		cout<<"Parsing line:    "<<strline<<'\n';
 		if (strline[0] == '#') {
@@ -38,7 +46,7 @@ vector<spair<string,int>>&& loadData(const char* file,const size_t& nfields = 2)
 			
 			//Split input line to a vector of parsed strings.
 			//TODO - put it in a function ?
-			vector<string> args(nfields); //Could convert this to array
+			vector<string> iargs; //Could convert this to array
 			int it2{0};
 			int it1{0};
 			int length = strline.find_last_not_of(' ')+1;
@@ -48,14 +56,20 @@ vector<spair<string,int>>&& loadData(const char* file,const size_t& nfields = 2)
 				it2 = strline.find_first_of(' ',it1+1);
 				(it2 < 0) ? it2 = length: 0;
 				(it1 < 0) ? it1 = it2 : 0;
-				args.push_back(strline.substr(it1,(it2-it1)));
-				cout<<"Adding =: "<<strline.substr(it1,(it2-it1))<<'\n';
+				
+				string ss = strline.substr(it1,(it2-it1));
+				if (ss.length()>0) {
+					iargs.push_back(ss);
+					cout<<"Adding =: "<<ss<<'\n';
+				}
 			}
 			
-			//take all args and push them / convert them if needed to appropriate type.
-			// Generalization : Could do it with a visitor (?)
-			
+			//Take all args and push them / convert them if needed to appropriate type.
+			Db.push_back(spair<string,int>(iargs[0],stoi(iargs[1])));
+			//-//
 			/*TODO - cleaner
+			
+			//Generalization : Could do it with a visitor (?)
 			for (auto a : args) {
 				if (a.length()>0) {
 					Db.push(a); //Need to define a class DataBase where the underlying structure is the vector i built			
@@ -64,13 +78,24 @@ vector<spair<string,int>>&& loadData(const char* file,const size_t& nfields = 2)
 
 		}
 	}
-	return std::move(data); //Avoid expensive copies.
+	return Db; 
 }
 
 int main() {
 
 	cout<<"Hello World"<<'\n';
-	loadData("input.data");
+
+	//loadData test - passed//
+	auto Db = std::move(loadData("input.data"));
+	
+	//-//Validate data added//-//
+	for (auto s : Db) {
+		cout<<"Key is =: "<<s.key()<<endl;
+		cout<<"Classement is =: "<<s.f1()<<" and +1 is =:" <<s.f1()+1<<endl;
+	}
+
+	//TODO - start indexing core.
+	
 	return 0;
 
 }
