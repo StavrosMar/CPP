@@ -10,12 +10,14 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <map>
 
 using namespace std;
 
 //Elementary database record - 1 line.
 //TODO - Variadic i.e. for an unlimited number of fields
 // S is key type and T is the first field sitting under it.
+//Compile time resolution
 template<typename S, typename F1> class spair {
 public:
 	S _key; //Key 1
@@ -75,7 +77,6 @@ vector<spair<string,int>> loadData(const char* file,const size_t& nfields = 2) {
 					Db.push(a); //Need to define a class DataBase where the underlying structure is the vector i built			
 				}
 			}*/
-
 		}
 	}
 	return Db; 
