@@ -6,6 +6,7 @@
 *                2) Push atomic
 *                3) TODO - Verify push/pop at the same time work ok.
 *                4) TODO - guard against ABA problem
+*                   - Can do it with wrapping the node ptrs inside an small object with a pointer
 */
 
 #include <iostream>
