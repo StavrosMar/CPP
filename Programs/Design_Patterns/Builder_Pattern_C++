@@ -1,0 +1,46 @@
+// Builder pattern in C++
+#include <iostream>
+#include <cstdlib>
+
+class List {
+private:
+
+int _size;
+
+public:
+
+private:
+    List(int a) : _size(a) {};
+    
+public:
+
+    int getSize() { return _size; };
+    
+    class Builder { 
+    
+        private: 
+            int _size;
+        public:
+        
+            List build() {
+                
+                return List(_size);
+            }
+            
+            Builder setSize(int k) {
+            
+                _size=k;
+                return *this;
+                
+             }
+    };
+            
+};
+
+
+int main()
+{
+
+    List l1 = List::Builder().setSize(3).build();
+    std::cout << l1.getSize() << std::endl;
+}
